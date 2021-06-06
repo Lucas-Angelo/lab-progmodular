@@ -108,65 +108,72 @@ public class App {
     //#endregion
 
     public static void main(String[] args) throws Exception {
-        Scanner teclado = new Scanner(System.in);
-        Pedido pedido=null;
-        Cliente unicoCliente = new Cliente("Joao", "123456");
-        int opcao = -1;
+        Cliente cliente = new Cliente("Lucas Ângelo", "143.269.096-50");
+        Pedido p = null;
+        cliente.addPedido(p);
+        // if(CPF.validarCPF("14326909650"))
+        //     System.out.printf("CPF Valido:%s \n");
+        // else
+        //     System.out.println("Invalido");
+        // Scanner teclado = new Scanner(System.in);
+        // Pedido pedido=null;
+        // Cliente unicoCliente = new Cliente("Joao", "123456");
+        // int opcao = -1;
        
-        do{
-            opcao = menu(teclado);
-            limparTela();
+        // do{
+        //     opcao = menu(teclado);
+        //     limparTela();
 
-            // Este switch pode ser melhorado BASTANTE com a extração de lógica dos cases
-            // e modularização em métodos específicos na região de métodos de controle.
-            switch(opcao){
-                case 1: if(pedido==null || pedido.fechado()){
-                            pedido = new Pedido();
-                            System.out.print("Novo pedido criado. ");
-                        }
-                        else
-                        System.out.print("Ainda há pedido aberto. ");
-                        pausa(teclado);
-                    break;
-                case 2: if(pedido!=null){
-                            Comida aux = criarComida(teclado);
-                            if(aux!=null) {
-                                if(pedido.addComida(aux))
-                                    System.out.println("Adicionado: "+aux);
-                                else
-                                    System.out.println("Não foi possível adicionar.");
-                            }
-                            else
-                                System.out.print("Inválido. Favor tentar novamente. ");
-                        }
-                        else
-                            System.out.print("Pedido ainda não foi aberto. ");
-                        pausa(teclado);
-                    break;
-                case 3: if(pedido!=null){
-                            System.out.println(pedido);
-                        }
-                        else
-                            System.out.print("Pedido ainda não foi aberto. ");
-                        pausa(teclado);
-                    break;
-                case 4: if(pedido!=null){
-                            pedido.fecharPedido();
-                            double aPagar = pedido.valorTotal()*(1.0 -unicoCliente.desconto());
-                            unicoCliente.addPedido(pedido);
-                            System.out.println(pedido);
-                            System.out.println("Cliente "+unicoCliente.nome+" paga R$ "+aPagar);
-                        }
-                        else
-                            System.out.print("Pedido ainda não foi aberto. ");
-                        pausa(teclado);
-                    break;
-                case 5: 
-                    break;
-            }
-        }while(opcao!=0);
+        //     // Este switch pode ser melhorado BASTANTE com a extração de lógica dos cases
+        //     // e modularização em métodos específicos na região de métodos de controle.
+        //     switch(opcao){
+        //         case 1: if(pedido==null || pedido.fechado()){
+        //                     pedido = new Pedido();
+        //                     System.out.print("Novo pedido criado. ");
+        //                 }
+        //                 else
+        //                 System.out.print("Ainda há pedido aberto. ");
+        //                 pausa(teclado);
+        //             break;
+        //         case 2: if(pedido!=null){
+        //                     Comida aux = criarComida(teclado);
+        //                     if(aux!=null) {
+        //                         if(pedido.addComida(aux))
+        //                             System.out.println("Adicionado: "+aux);
+        //                         else
+        //                             System.out.println("Não foi possível adicionar.");
+        //                     }
+        //                     else
+        // 7                        System.out.print("Inválido. Favor tentar novamente. ");
+        //                 }
+        //                 else
+        //                     System.out.print("Pedido ainda não foi aberto. ");
+        //                 pausa(teclado);
+        //             break;
+        //         case 3: if(pedido!=null){
+        //                     System.out.println(pedido);
+        //                 }
+        //                 else
+        //                     System.out.print("Pedido ainda não foi aberto. ");
+        //                 pausa(teclado);
+        //             break;
+        //         case 4: if(pedido!=null){
+        //                     pedido.fecharPedido();
+        //                     double aPagar = pedido.valorTotal()*(1.0 -unicoCliente.desconto());
+        //                     unicoCliente.addPedido(pedido);
+        //                     System.out.println(pedido);
+        //                     System.out.println("Cliente "+unicoCliente.nome+" paga R$ "+aPagar);
+        //                 }
+        //                 else
+        //                     System.out.print("Pedido ainda não foi aberto. ");
+        //                 pausa(teclado);
+        //             break;
+        //         case 5: 
+        //             break;
+        //     }
+        // }while(opcao!=0);
 
-        System.out.println("FIM");
-        teclado.close();
+        // System.out.println("FIM");
+        // teclado.close();
     }
 }

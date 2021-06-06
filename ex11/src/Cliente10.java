@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.util.List;
 
 /** 
  * MIT License
@@ -38,7 +39,7 @@ public class Cliente10 implements IFidelidade {
      * Desconto do cliente: concedido com R$100 nos últimos 31 dias ou 25 pedidos no ano
      */
     @Override
-    public double desconto(Pedido[] pedidos) {
+    public double desconto(List<Pedido> pedidos) {
         double desconto = 0.0;
         double valorPedidos=0.0;
         int totalPedidos = 0;
