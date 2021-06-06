@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -110,7 +112,14 @@ public class App {
     public static void main(String[] args) throws Exception {
         Scanner teclado = new Scanner(System.in);
         Pedido pedido=null;
-        Cliente unicoCliente = new Cliente("Joao", "123456");
+        List<Cliente> listaClientes = new ArrayList<>();
+        listaClientes.add(new Cliente("Thom Andrews","123.456.789-00"));
+        listaClientes.add(new Cliente("Jeff Gordon","234.567.890-11"));
+        listaClientes.add(new Cliente("Nick Hill","345.678.901-22"));
+        listaClientes.add(new Cliente("Kim Harris","456.789.012-33"));
+        listaClientes.add(new Cliente("Bianca Jersey","557.890.123-44"));
+
+        Cliente unicoCliente = null;
         int opcao = -1;
        
         do{
@@ -122,6 +131,13 @@ public class App {
             switch(opcao){
                 case 1: if(pedido==null || pedido.fechado()){
                             pedido = new Pedido();
+                            while (unicoCliente == null) {
+                                System.out.println("Digite o CPF do Cliente");
+                                String cpf = teclado.nextLine().replaceAll("[^0-9]", "");
+                                unicoCliente = listaClientes.stream().filter(cliente -> cpf.equals(cliente.getCPF())).findFirst().orElse(null);
+                                if(unicoCliente == null)
+                                    System.out.println("Cliente nao cadastrado");
+                            }
                             System.out.print("Novo pedido criado. ");
                         }
                         else

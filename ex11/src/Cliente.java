@@ -30,7 +30,7 @@ public class Cliente {
     
     /** Nome do cliente (livre) */
     public String nome;
-    /** CPF do cliente (sem validação) */
+     /** CPF do cliente (sem validação) */
     private String CPF;
     /** Vetor de pedidos. A ser melhorado */
     private Pedido pedidos[];
@@ -47,7 +47,7 @@ public class Cliente {
  */
     public Cliente(String nome, String CPF){
         this.nome = nome;
-        this.CPF = CPF;
+        this.CPF = CPF.replaceAll("[^0-9]", "");
         this.pedidos = new Pedido[1_000];
         this.qtPedidos=0;
         this.categoriaFidelidade = null;
@@ -96,6 +96,14 @@ public class Cliente {
             this.categoriaFidelidade = teste;
     }
 
+
+     /**
+      * Busca o CPF do cliente
+      */
+    public String getCPF() {
+        return CPF;
+    }
+
     /**
      * Descrição do cliente: nome, CPF, total de pedidos
      */
@@ -105,7 +113,5 @@ public class Cliente {
         sb.append("Total de pedidos: "+this.qtPedidos+"\n");
         return sb.toString();
     }
-
-
 
 }
