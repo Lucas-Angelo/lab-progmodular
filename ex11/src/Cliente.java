@@ -35,7 +35,7 @@ public class Cliente implements Serializable {
 
     /** Nome do cliente (livre) */
     public String nome;
-    /** CPF do cliente (sem validação) */
+     /** CPF do cliente (sem validação) */
     private String CPF;
     /** Vetor de pedidos. A ser melhorado */
     private List<Pedido> pedidos;
@@ -122,6 +122,14 @@ public class Cliente implements Serializable {
 
         if (teste.desconto(this.pedidos) > 0)
             this.categoriaFidelidade = teste;
+    }
+
+
+     /**
+      * Busca o CPF do cliente
+      */
+    public String getCPF() {
+        return CPF;
     }
 
     /**
