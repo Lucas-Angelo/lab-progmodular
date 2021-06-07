@@ -1,6 +1,7 @@
 import java.util.LinkedList;
 import java.util.List;
 import java.io.Serializable;
+
 /** 
  * MIT License
  *
@@ -26,14 +27,15 @@ import java.io.Serializable;
  */
 
 /**
-  * Classe cliente do restaurante. Contém pedidos (composição)
-  * @author João Caram
-  */
+ * Classe cliente do restaurante. Contém pedidos (composição)
+ * 
+ * @author João Caram
+ */
 public class Cliente implements Serializable {
-    
+
     /** Nome do cliente (livre) */
     public String nome;
-     /** CPF do cliente (sem validação) */
+    /** CPF do cliente (sem validação) */
     private String CPF;
     /** Vetor de pedidos. A ser melhorado */
     private List<Pedido> pedidos;
@@ -49,7 +51,7 @@ public class Cliente implements Serializable {
         this.nome = nome;
         try {
             CPF = CPF.replaceAll("[^0-9]", "");
-            if(new CPF().validarCPF(CPF))
+            if (new CPF().validarCPF(CPF))
                 this.CPF = CPF;
             else
                 throw new CPFInvalidoException(CPF);
@@ -81,7 +83,7 @@ public class Cliente implements Serializable {
         boolean resposta = true;
 
         try {
-            if(p!=null) {
+            if (p != null) {
                 this.pedidos.add(p);
                 this.qtPedidos++;
                 this.mudarCategoria();
@@ -113,20 +115,18 @@ public class Cliente implements Serializable {
     private void mudarCategoria() {
         IFidelidade teste; // vou testar se ele pode subir de categoria
 
-        if (this.categoriaFidelidade == null) {
+        if (this.categoriaFidelidade == null)
             teste = new Cliente10();
-        } else {
+        else
             teste = new Cliente25();
-        }
 
         if (teste.desconto(this.pedidos) > 0)
             this.categoriaFidelidade = teste;
     }
 
-
-     /**
-      * Busca o CPF do cliente
-      */
+    /**
+     * Busca o CPF do cliente
+     */
     public String getCPF() {
         return CPF;
     }
@@ -135,7 +135,7 @@ public class Cliente implements Serializable {
      * Descrição do cliente: nome, CPF, total de pedidos
      */
     public String toString() {
-        StringBuilder sb = new StringBuilder(this.nome);
+        StringBuilder sb = new StringBuilder(this.nome + "\n");
         sb.append("CPF: " + this.CPF + "\n");
         sb.append("Total de pedidos: " + this.qtPedidos + "\n");
         return sb.toString();
