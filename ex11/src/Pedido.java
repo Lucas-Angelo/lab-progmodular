@@ -22,8 +22,10 @@
  * SOFTWARE.
  */
 
- /** Classe pedido. Um pedido contém várias comidas (agregação) */
-public class Pedido {
+import java.io.Serializable;
+
+/** Classe pedido. Um pedido contém várias comidas (agregação) */
+public class Pedido implements Serializable {
     /** Constante: máximo de comidas por pedido */
     private static final int MAXCOMIDAS;
     /** Atributo de classe para gerar novos IDs */
