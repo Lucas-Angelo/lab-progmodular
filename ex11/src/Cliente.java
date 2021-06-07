@@ -48,6 +48,7 @@ public class Cliente implements Serializable {
     private void init(String nome, String CPF) {
         this.nome = nome;
         try {
+            CPF = CPF.replaceAll("[^0-9]", "");
             if(new CPF().validarCPF(CPF))
                 this.CPF = CPF;
             else
