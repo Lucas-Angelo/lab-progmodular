@@ -133,13 +133,6 @@ public class Cliente implements Serializable {
     }
 
     /**
-     * Busca o CPF do cliente
-     */
-    public String getCPF() {
-        return CPF;
-    }
-
-    /**
      * Descrição do cliente: nome, CPF, total de pedidos
      */
     public String toString() {
