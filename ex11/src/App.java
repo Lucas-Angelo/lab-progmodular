@@ -42,6 +42,24 @@ public class App {
         System.out.flush();
     }
 
+    public static List<Cliente> carregarClientesDoArquivo(List<Cliente> clientes) {
+        File f = new File("arqClientes.bin");
+        if(f.exists() && !f.isDirectory()) {
+            LeituraSerializada leitura = new LeituraSerializada();
+            leitura.abrirArquivo("arqClientes.bin");
+            try {
+                for (Object objeto : leitura.lerArquivo()) {
+                    clientes.add((Cliente) objeto);
+                }
+            } catch (ClassCastException e) {
+                System.err.println("Erro: Fallha ao fazer o casting dos objetos salvos no arquivo para Cliente, não foi possível carregar os clientes.");
+            }
+            leitura.fecharArquivo();
+        }
+
+        return clientes;
+    } 
+
     /**
      * Menu para o restaurante
      * 
@@ -118,17 +136,11 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         Scanner teclado = new Scanner(System.in);
-        Pedido pedido=null;
+
         List<Cliente> listaClientes = new ArrayList<>();
-
-
-        File f = new File("arqClientes.bin");
-        if(f.exists() && !f.isDirectory()) {
-            FileInputStream arqLeitura = new FileInputStream("arqClientes.bin");
-            ObjectInputStream streamLeitura = new ObjectInputStream(arqLeitura);
-            listaClientes = (List<Cliente>) streamLeitura.readObject();
-            streamLeitura.close();
-        } else {
+        listaClientes = carregarClientesDoArquivo(listaClientes);
+        
+        if (listaClientes.isEmpty()) {
             listaClientes.add(new Cliente("Thom Andrews","123.456.789-00"));
             listaClientes.add(new Cliente("Jeff Gordon","234.567.890-11"));
             listaClientes.add(new Cliente("Nick Hill","345.678.901-22"));
@@ -136,6 +148,7 @@ public class App {
             listaClientes.add(new Cliente("Bianca Jersey","557.890.123-44"));
         }
 
+        Pedido pedido=null;
         Cliente unicoCliente = null;
         int opcao = -1;
        
