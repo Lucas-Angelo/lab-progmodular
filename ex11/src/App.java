@@ -1,3 +1,4 @@
+
 /** 
  * MIT License
  *
@@ -28,26 +29,26 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Exemplo - Restaurante, comidas, pedidos, clientes e fidelidade
- * Versão 0.3
+ * Exemplo - Restaurante, comidas, pedidos, clientes e fidelidade Versão 0.3
  */
 public class App {
 
-    //#region Utilidades
+    // #region Utilidades
     /**
      * "Limpa" a tela (códigos de terminal VT-100)
      */
-    public static void limparTela(){
-        System.out.print("\033[H\033[2J");  
-        System.out.flush();  
+    public static void limparTela() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     /**
      * Menu para o restaurante
+     * 
      * @param teclado Scanner de leitura
      * @return Opção do usuário (int)
      */
-    public static int menu(Scanner teclado){
+    public static int menu(Scanner teclado) {
         limparTela();
         System.out.println("XULAMBS DELIVERY");
         System.out.println("==========================");
@@ -65,37 +66,42 @@ public class App {
 
     /**
      * Pausa para leitura de mensagens em console
+     * 
      * @param teclado Scanner de leitura
      */
-    static void pausa(Scanner teclado){
+    static void pausa(Scanner teclado) {
         System.out.println("Enter para continuar.");
         teclado.nextLine();
     }
-    //#endregion
+    // #endregion
 
-    //#region Métodos de controle
+    // #region Métodos de controle
     /**
      * Cria uma comida de acordo com opções do menu (método "fábrica")
+     * 
      * @param teclado Scanner de leitura
      * @return Uma comida ou nulo
      */
-    static Comida criarComida(Scanner teclado){
+    static Comida criarComida(Scanner teclado) {
         System.out.print("Incluir no pedido(1-Pizza 2-Sanduíche): ");
         int tipo = Integer.parseInt(teclado.nextLine());
         Comida nova;
-        switch(tipo){
-            case 1: nova = new Pizza(false);
+        switch (tipo) {
+            case 1:
+                nova = new Pizza(false);
                 break;
-            case 2: nova = new Sanduiche(false);
+            case 2:
+                nova = new Sanduiche(false);
                 break;
-            default: nova= null;
+            default:
+                nova = null;
                 break;
         }
-        if(nova!=null){
+        if (nova != null) {
             System.out.print("Quantos adicionais: ");
             int quantos = Integer.parseInt(teclado.nextLine());
-            for(int i=0; i<quantos;i++) 
-                nova.addIngrediente("adicional "+(i+1)+" ");
+            for (int i = 0; i < quantos; i++)
+                nova.addIngrediente("adicional " + (i + 1) + " ");
         }
         return nova;
     }
@@ -108,7 +114,7 @@ public class App {
         p = new Pedido();
         System.out.print("Novo pedido criado. ");
     }
-    //#endregion
+    // #endregion
 
     public static void main(String[] args) throws Exception {
         Scanner teclado = new Scanner(System.in);
@@ -140,7 +146,8 @@ public class App {
             // Este switch pode ser melhorado BASTANTE com a extração de lógica dos cases
             // e modularização em métodos específicos na região de métodos de controle.
             switch(opcao){
-                case 1: if(pedido==null || pedido.fechado()){
+                case 1: 
+                    if(pedido==null || pedido.fechado()){
                             while (unicoCliente == null) {
                                 System.out.println("Digite o CPF do Cliente (Ou digite 0 para sair)");
                                 String cpf = teclado.nextLine().replaceAll("[^0-9]", "");
@@ -161,7 +168,8 @@ public class App {
                             System.out.print("Ainda há pedido aberto. ");
                         pausa(teclado);
                     break;
-                case 2: if(pedido!=null){
+                case 2: 
+                    if(pedido!=null){
                             Comida aux = criarComida(teclado);
                             if(aux!=null) {
                                 if(pedido.addComida(aux))
@@ -176,14 +184,16 @@ public class App {
                             System.out.print("Pedido ainda não foi aberto. ");
                         pausa(teclado);
                     break;
-                case 3: if(pedido!=null){
+                case 3: 
+                        if(pedido!=null){
                             System.out.println(pedido);
                         }
                         else
                             System.out.print("Pedido ainda não foi aberto. ");
                         pausa(teclado);
                     break;
-                case 4: if(pedido!=null){
+                case 4: 
+                        if(pedido!=null){
                             pedido.fecharPedido();
                             double aPagar = pedido.valorTotal()*(1.0 -unicoCliente.desconto());
                             unicoCliente.addPedido(pedido);
@@ -203,7 +213,7 @@ public class App {
                     streamClientes.close();
                     break;
             }
-        }while(opcao!=0);
+        } while(opcao!=0);
 
         System.out.println("FIM");
         teclado.close();

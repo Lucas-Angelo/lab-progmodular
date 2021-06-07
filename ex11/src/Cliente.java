@@ -1,3 +1,7 @@
+import java.util.LinkedList;
+import java.util.List;
+import java.io.Serializable;
+
 /** 
  * MIT License
  *
@@ -22,79 +26,101 @@
  * SOFTWARE.
  */
 
-import java.io.Serializable;
-
 /**
-  * Classe cliente do restaurante. Contém pedidos (composição)
-  * @author João Caram
-  */
+ * Classe cliente do restaurante. Contém pedidos (composição)
+ * 
+ * @author João Caram
+ */
 public class Cliente implements Serializable {
-    
+
     /** Nome do cliente (livre) */
     public String nome;
      /** CPF do cliente (sem validação) */
     private String CPF;
     /** Vetor de pedidos. A ser melhorado */
-    private Pedido pedidos[];
+    private List<Pedido> pedidos;
     /** Quantidade de pedidos até o momento */
     private int qtPedidos;
-    /** Categoria: injeção de dependência com interface. Composição em lugar de herança */
+    /**
+     * Categoria: injeção de dependência com interface. Composição em lugar de
+     * herança
+     */
     private IFidelidade categoriaFidelidade;
 
-    
-/**
- * Construtor. Devolve um cliente com 0 pedidos e categoria de fidelidade
- * @param nome Nome do cliente (livre)
- * @param CPF CPF do cliente (sem validação)
- */
-    public Cliente(String nome, String CPF){
+    private void init(String nome, String CPF) {
         this.nome = nome;
-        this.CPF = CPF.replaceAll("[^0-9]", "");
-        this.pedidos = new Pedido[1_000];
-        this.qtPedidos=0;
+        try {
+            CPF = CPF.replaceAll("[^0-9]", "");
+            if (new CPF().validarCPF(CPF))
+                this.CPF = CPF;
+            else
+                throw new CPFInvalidoException(CPF);
+        } catch (CPFInvalidoException e) {
+            System.err.println(e.getMessage());
+        }
+        this.pedidos = new LinkedList<>();
+        this.qtPedidos = 0;
         this.categoriaFidelidade = null;
     }
 
     /**
+     * Construtor. Devolve um cliente com 0 pedidos e categoria de fidelidade
+     * 
+     * @param nome Nome do cliente (livre)
+     * @param CPF  CPF do cliente (sem validação)
+     */
+    public Cliente(String nome, String CPF) {
+        init(nome, CPF);
+    }
+
+    /**
      * Adiciona um pedido
-     * @param p O pedido já pronto 
+     * 
+     * @param p O pedido já pronto
      * @return V/F se foi possível adicionar
      */
-    public boolean addPedido(Pedido p){
+    public boolean addPedido(Pedido p) {
         boolean resposta = true;
-        if(this.qtPedidos < this.pedidos.length){
-            this.pedidos[this.qtPedidos] = p;
-            this.qtPedidos++;
-            this.mudarCategoria();
-        }
-        else
+
+        try {
+            if (p != null) {
+                this.pedidos.add(p);
+                this.qtPedidos++;
+                this.mudarCategoria();
+            } else {
+                throw new NullPointerException("O pedido já deve estar pronto (Não nulo!).");
+            }
+        } catch (NullPointerException e) {
+            System.err.println(e.getMessage());
             resposta = false;
+        }
 
         return resposta;
     }
 
     /**
-     * Retorna o desconto atual do cliente, em %. Calculado por sua categoria de fidelidade.
+     * Retorna o desconto atual do cliente, em %. Calculado por sua categoria de
+     * fidelidade.
      */
-    public double desconto(){
-        if(this.categoriaFidelidade == null) return 0;
-        else return this.categoriaFidelidade.desconto(pedidos);
+    public double desconto() {
+        if (this.categoriaFidelidade == null)
+            return 0;
+        else
+            return this.categoriaFidelidade.desconto(pedidos);
     }
 
     /**
      * Verifica mudança de categoria. Só verifica upgrades, não rebaixa o cliente.
      */
-    private void mudarCategoria(){
-        IFidelidade teste;  //vou testar se ele pode subir de categoria
+    private void mudarCategoria() {
+        IFidelidade teste; // vou testar se ele pode subir de categoria
 
-        if(this.categoriaFidelidade == null){
+        if (this.categoriaFidelidade == null)
             teste = new Cliente10();
-        }
-        else{
-            teste = new Cliente25();    
-        }
+        else
+            teste = new Cliente25();
 
-        if(teste.desconto(this.pedidos) > 0 )
+        if (teste.desconto(this.pedidos) > 0)
             this.categoriaFidelidade = teste;
     }
 
@@ -107,12 +133,19 @@ public class Cliente implements Serializable {
     }
 
     /**
+     * Busca o CPF do cliente
+     */
+    public String getCPF() {
+        return CPF;
+    }
+
+    /**
      * Descrição do cliente: nome, CPF, total de pedidos
      */
-    public String toString(){
-        StringBuilder sb = new StringBuilder(this.nome);
-        sb.append("CPF: "+this.CPF+"\n");
-        sb.append("Total de pedidos: "+this.qtPedidos+"\n");
+    public String toString() {
+        StringBuilder sb = new StringBuilder(this.nome + "\n");
+        sb.append("CPF: " + this.CPF + "\n");
+        sb.append("Total de pedidos: " + this.qtPedidos + "\n");
         return sb.toString();
     }
 

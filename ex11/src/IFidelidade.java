@@ -1,3 +1,5 @@
+import java.util.List;
+
 /** 
  * MIT License
  *
@@ -30,6 +32,6 @@ public interface IFidelidade {
      * @param pedidos Lista/vetor de pedidos 
      * @return Valor do desconto (% em fração de 0 a 1)
      */
-    public double desconto(Pedido[] pedidos);
+    public double desconto(List<Pedido> pedidos);
      
 }
