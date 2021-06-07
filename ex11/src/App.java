@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -113,11 +114,21 @@ public class App {
         Scanner teclado = new Scanner(System.in);
         Pedido pedido=null;
         List<Cliente> listaClientes = new ArrayList<>();
-        listaClientes.add(new Cliente("Thom Andrews","123.456.789-00"));
-        listaClientes.add(new Cliente("Jeff Gordon","234.567.890-11"));
-        listaClientes.add(new Cliente("Nick Hill","345.678.901-22"));
-        listaClientes.add(new Cliente("Kim Harris","456.789.012-33"));
-        listaClientes.add(new Cliente("Bianca Jersey","557.890.123-44"));
+
+
+        File f = new File("arqClientes.bin");
+        if(f.exists() && !f.isDirectory()) {
+            FileInputStream arqLeitura = new FileInputStream("arqClientes.bin");
+            ObjectInputStream streamLeitura = new ObjectInputStream(arqLeitura);
+            listaClientes = (List<Cliente>) streamLeitura.readObject();
+            streamLeitura.close();
+        } else {
+            listaClientes.add(new Cliente("Thom Andrews","123.456.789-00"));
+            listaClientes.add(new Cliente("Jeff Gordon","234.567.890-11"));
+            listaClientes.add(new Cliente("Nick Hill","345.678.901-22"));
+            listaClientes.add(new Cliente("Kim Harris","456.789.012-33"));
+            listaClientes.add(new Cliente("Bianca Jersey","557.890.123-44"));
+        }
 
         Cliente unicoCliente = null;
         int opcao = -1;
@@ -130,18 +141,24 @@ public class App {
             // e modularização em métodos específicos na região de métodos de controle.
             switch(opcao){
                 case 1: if(pedido==null || pedido.fechado()){
-                            pedido = new Pedido();
                             while (unicoCliente == null) {
-                                System.out.println("Digite o CPF do Cliente");
+                                System.out.println("Digite o CPF do Cliente (Ou digite 0 para sair)");
                                 String cpf = teclado.nextLine().replaceAll("[^0-9]", "");
+                                if(cpf.equals("0"))
+                                    break;
                                 unicoCliente = listaClientes.stream().filter(cliente -> cpf.equals(cliente.getCPF())).findFirst().orElse(null);
                                 if(unicoCliente == null)
-                                    System.out.println("Cliente nao cadastrado");
+                                    System.out.println("Cliente não cadastrado");
                             }
-                            System.out.print("Novo pedido criado. ");
+
+                            if(unicoCliente != null) {
+                                pedido = new Pedido();
+                                System.out.print("Novo pedido criado. ");
+                            } else
+                                System.out.print("Pedido não criado. Cliente não definido \n");
                         }
                         else
-                        System.out.print("Ainda há pedido aberto. ");
+                            System.out.print("Ainda há pedido aberto. ");
                         pausa(teclado);
                     break;
                 case 2: if(pedido!=null){
@@ -177,7 +194,13 @@ public class App {
                             System.out.print("Pedido ainda não foi aberto. ");
                         pausa(teclado);
                     break;
-                case 5: 
+                case 5:
+                    break;
+                case 0:
+                    FileOutputStream arqClientes = new FileOutputStream("arqClientes.bin");
+                    ObjectOutputStream streamClientes = new ObjectOutputStream(arqClientes);
+                    streamClientes.writeObject(listaClientes);
+                    streamClientes.close();
                     break;
             }
         }while(opcao!=0);

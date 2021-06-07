@@ -22,11 +22,13 @@
  * SOFTWARE.
  */
 
- /**
+import java.io.Serializable;
+
+/**
   * Classe cliente do restaurante. Contém pedidos (composição)
   * @author João Caram
   */
-public class Cliente {
+public class Cliente implements Serializable {
     
     /** Nome do cliente (livre) */
     public String nome;
