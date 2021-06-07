@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
- /** Classe Pizza, herda de Comida */
-public class Pizza extends Comida{
- 
+/** Classe Pizza, herda de Comida */
+public class Pizza extends Comida {
+
     /** Preço base da Pizza */
     private static final double PRECO_PIZZA = 30.0;
-    /** Máximo de adicionais de uma Pizza*/
+    /** Máximo de adicionais de uma Pizza */
     private static final int MAX_ADICIONAIS = 10;
     /** Multiplicador de adicionais (regra própria da pizza) */
     private static final double MULTIPLICADOR_ADICIONAIS = 2.0;
@@ -37,14 +37,14 @@ public class Pizza extends Comida{
 
     /**
      * Construtor. Indica pizza com borda recheada ou não
+     * 
      * @param borda Booleano para borda recheada
      */
-    public Pizza(boolean borda){
-        super(PRECO_PIZZA,MAX_ADICIONAIS); //construtor da classe mãe
+    public Pizza(boolean borda) {
+        super(PRECO_PIZZA, MAX_ADICIONAIS); // construtor da classe mãe
         this.setDescricao("Pizza ");
         this.bordaRecheada = borda;
     }
-    
 
     @Override
     /**
@@ -52,10 +52,10 @@ public class Pizza extends Comida{
      */
     public double precoFinal() {
 
-        double precoFinal = precoBase+(this.qtAdicionais * VALOR_ADICIONAL * MULTIPLICADOR_ADICIONAIS);
-        if(this.bordaRecheada)
-            precoFinal +=7.50;
+        double precoFinal = precoBase + (this.qtAdicionais * VALOR_ADICIONAL * MULTIPLICADOR_ADICIONAIS);
+        if (this.bordaRecheada)
+            precoFinal += 7.50;
         return precoFinal;
-	}
+    }
 
 }

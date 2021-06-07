@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
- /** Classe Sanduíche, herda de Comida */
-public class Sanduiche extends Comida{
- 
+/** Classe Sanduíche, herda de Comida */
+public class Sanduiche extends Comida {
+
     /** Preço base do sanduíche */
     private static final double PRECO_SANDUICHE = 12.0;
     /** Máximo de adicionais de um sanduíche */
@@ -32,15 +32,15 @@ public class Sanduiche extends Comida{
 
     /** Regra própria: pode ter o dobro de carne */
     private boolean dobroDeCarne;
-    
+
     /**
      * Construtor: indica se tem o dobro de carne
      */
-    public Sanduiche(boolean dobro){
-        super(PRECO_SANDUICHE, MAX_ADICIONAIS); //construtor da classe mãe
+    public Sanduiche(boolean dobro) {
+        super(PRECO_SANDUICHE, MAX_ADICIONAIS); // construtor da classe mãe
         this.setDescricao("Sanduíche ");
         this.dobroDeCarne = dobro;
-        if(this.dobroDeCarne)
+        if (this.dobroDeCarne)
             this.descricao += "com duas carnes ";
     }
 
@@ -48,10 +48,10 @@ public class Sanduiche extends Comida{
      * Calcula o preço final, com a regra própria do dobro de carne
      */
     @Override
-    public double precoFinal() {        
-        double precoFinal = precoBase+(this.qtAdicionais * VALOR_ADICIONAL);
-        if(this.dobroDeCarne)        
-            precoFinal+=5.0;
+    public double precoFinal() {
+        double precoFinal = precoBase + (this.qtAdicionais * VALOR_ADICIONAL);
+        if (this.dobroDeCarne)
+            precoFinal += 5.0;
         return precoFinal;
-	}
+    }
 }

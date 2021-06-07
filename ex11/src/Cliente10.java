@@ -25,41 +25,39 @@ import java.util.List;
  * SOFTWARE.
  */
 
- /** Cliente com 10% de desconto.
-  *  Demonstração de composição vs herança
-  */
+/**
+ * Cliente com 10% de desconto. Demonstração de composição vs herança
+ */
 public class Cliente10 implements IFidelidade {
     /** Data de referência. */
     LocalDate data = LocalDate.now();
     /** Data de referência. */
-    Data hoje = new Data(data.getDayOfMonth(),data.getMonthValue(), data.getYear());
+    Data hoje = new Data(data.getDayOfMonth(), data.getMonthValue(), data.getYear());
 
-    
     /**
-     * Desconto do cliente: concedido com R$100 nos últimos 31 dias ou 25 pedidos no ano
+     * Desconto do cliente: concedido com R$100 nos últimos 31 dias ou 25 pedidos no
+     * ano
      */
     @Override
     public double desconto(List<Pedido> pedidos) {
         double desconto = 0.0;
-        double valorPedidos=0.0;
+        double valorPedidos = 0.0;
         int totalPedidos = 0;
         for (Pedido pedido : pedidos) {
-            if(pedido!=null){
+            if (pedido != null) {
                 Data auxMes = pedido.dataPedido.acrescentaDias(31);
                 Data auxAno = pedido.dataPedido.acrescentaDias(366);
-                if(!hoje.maisRecente(auxMes))
+                if (!hoje.maisRecente(auxMes))
                     valorPedidos += pedido.valorTotal();
-                if(!hoje.maisRecente(auxAno))
+                if (!hoje.maisRecente(auxAno))
                     totalPedidos++;
             }
         }
 
-        if(valorPedidos>=100.00 || totalPedidos>=25)
+        if (valorPedidos >= 100.00 || totalPedidos >= 25)
             desconto = 0.1;
-        
-        
+
         return desconto;
     }
-    
-    
+
 }
