@@ -1,4 +1,7 @@
 
+import java.io.*;
+import java.util.*;
+
 /** 
  * MIT License
  *
@@ -23,11 +26,6 @@
  * SOFTWARE.
  */
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 /**
  * Exemplo - Restaurante, comidas, pedidos, clientes e fidelidade Versão 0.3
  */
@@ -42,14 +40,14 @@ public class App {
         System.out.flush();
     }
 
-    public static List<Cliente> carregarClientesDoArquivo(List<Cliente> clientes) {
-        File f = new File("arqClientes.bin");
-        if(f.exists() && !f.isDirectory()) {
+    public static List<Cliente> carregarClientesDoArquivo(List<Cliente> listaClientes, String arquivo) {
+        File f = new File(arquivo);
+        if (f.exists() && !f.isDirectory()) {
             LeituraSerializada leitura = new LeituraSerializada();
-            leitura.abrirArquivo("arqClientes.bin");
+            leitura.abrirArquivo(arquivo);
             try {
                 for (Object objeto : leitura.lerArquivo()) {
-                    clientes.add((Cliente) objeto);
+                    listaClientes.add((Cliente) objeto);
                 }
             } catch (ClassCastException e) {
                 System.err.println("Erro: Fallha ao fazer o casting dos objetos salvos no arquivo para Cliente, não foi possível carregar os clientes.");
@@ -57,8 +55,22 @@ public class App {
             leitura.fecharArquivo();
         }
 
-        return clientes;
-    } 
+        return listaClientes;
+    }
+
+    public static void salvarClientesNoArquivo(List<Cliente> listaClientes, String arquivo) {
+        File f = new File(arquivo);
+        if (f.exists() && !f.isDirectory()) {
+            EscritaSerializada<Cliente> escrita = new EscritaSerializada<Cliente>();
+            escrita.abrirArquivo(arquivo);
+            try {
+                escrita.escrever(listaClientes);
+            } catch (ClassCastException e) {
+                System.err.println("Erro: Fallha ao fazer o casting dos objetos salvos no arquivo para Cliente, não foi possível carregar os clientes.");
+            }
+            escrita.fecharArquivo();
+        }
+    }
 
     /**
      * Menu para o restaurante
@@ -126,107 +138,102 @@ public class App {
 
     /**
      * Apaga o pedido p e cria um novo
+     * 
      * @param p O pedido a ser apagado
      */
-    static void criarNovo(Pedido p){
+    static void criarNovo(Pedido p) {
         p = new Pedido();
         System.out.print("Novo pedido criado. ");
     }
     // #endregion
 
     public static void main(String[] args) throws Exception {
+        String arquivo = "arqClientes.bin";
         Scanner teclado = new Scanner(System.in);
 
         List<Cliente> listaClientes = new ArrayList<>();
-        listaClientes = carregarClientesDoArquivo(listaClientes);
-        
+        listaClientes = carregarClientesDoArquivo(listaClientes, arquivo);
+
         if (listaClientes.isEmpty()) {
-            listaClientes.add(new Cliente("Thom Andrews","123.456.789-00"));
-            listaClientes.add(new Cliente("Jeff Gordon","234.567.890-11"));
-            listaClientes.add(new Cliente("Nick Hill","345.678.901-22"));
-            listaClientes.add(new Cliente("Kim Harris","456.789.012-33"));
-            listaClientes.add(new Cliente("Bianca Jersey","557.890.123-44"));
+            listaClientes.add(new Cliente("Thom Andrews", "123.456.789-00"));
+            listaClientes.add(new Cliente("Jeff Gordon", "234.567.890-11"));
+            listaClientes.add(new Cliente("Nick Hill", "345.678.901-22"));
+            listaClientes.add(new Cliente("Kim Harris", "456.789.012-33"));
+            listaClientes.add(new Cliente("Bianca Jersey", "557.890.123-44"));
         }
 
-        Pedido pedido=null;
+        Pedido pedido = null;
         Cliente unicoCliente = null;
         int opcao = -1;
-       
-        do{
+
+        do {
             opcao = menu(teclado);
             limparTela();
 
             // Este switch pode ser melhorado BASTANTE com a extração de lógica dos cases
             // e modularização em métodos específicos na região de métodos de controle.
-            switch(opcao){
-                case 1: 
-                    if(pedido==null || pedido.fechado()){
-                            while (unicoCliente == null) {
-                                System.out.println("Digite o CPF do Cliente (Ou digite 0 para sair)");
-                                String cpf = teclado.nextLine().replaceAll("[^0-9]", "");
-                                if(cpf.equals("0"))
-                                    break;
-                                unicoCliente = listaClientes.stream().filter(cliente -> cpf.equals(cliente.getCPF())).findFirst().orElse(null);
-                                if(unicoCliente == null)
-                                    System.out.println("Cliente não cadastrado");
-                            }
+            switch (opcao) {
+                case 1:
+                    if (pedido == null || pedido.fechado()) {
+                        while (unicoCliente == null) {
+                            System.out.println("Digite o CPF do Cliente (Ou digite 0 para sair)");
+                            String cpf = teclado.nextLine().replaceAll("[^0-9]", "");
+                            if (cpf.equals("0"))
+                                break;
+                            unicoCliente = listaClientes.stream().filter(cliente -> cpf.equals(cliente.getCPF()))
+                                    .findFirst().orElse(null);
+                            if (unicoCliente == null)
+                                System.out.println("Cliente não cadastrado");
+                        }
 
-                            if(unicoCliente != null) {
-                                pedido = new Pedido();
-                                System.out.print("Novo pedido criado. ");
-                            } else
-                                System.out.print("Pedido não criado. Cliente não definido \n");
-                        }
-                        else
-                            System.out.print("Ainda há pedido aberto. ");
-                        pausa(teclado);
+                        if (unicoCliente != null) {
+                            pedido = new Pedido();
+                            System.out.print("Novo pedido criado. ");
+                        } else
+                            System.out.print("Pedido não criado. Cliente não definido \n");
+                    } else
+                        System.out.print("Ainda há pedido aberto. ");
+                    pausa(teclado);
                     break;
-                case 2: 
-                    if(pedido!=null){
-                            Comida aux = criarComida(teclado);
-                            if(aux!=null) {
-                                if(pedido.addComida(aux))
-                                    System.out.println("Adicionado: "+aux);
-                                else
-                                    System.out.println("Não foi possível adicionar.");
-                            }
+                case 2:
+                    if (pedido != null) {
+                        Comida aux = criarComida(teclado);
+                        if (aux != null) {
+                            if (pedido.addComida(aux))
+                                System.out.println("Adicionado: " + aux);
                             else
-                                System.out.print("Inválido. Favor tentar novamente. ");
-                        }
-                        else
-                            System.out.print("Pedido ainda não foi aberto. ");
-                        pausa(teclado);
+                                System.out.println("Não foi possível adicionar.");
+                        } else
+                            System.out.print("Inválido. Favor tentar novamente. ");
+                    } else
+                        System.out.print("Pedido ainda não foi aberto. ");
+                    pausa(teclado);
                     break;
-                case 3: 
-                        if(pedido!=null){
-                            System.out.println(pedido);
-                        }
-                        else
-                            System.out.print("Pedido ainda não foi aberto. ");
-                        pausa(teclado);
+                case 3:
+                    if (pedido != null) {
+                        System.out.println(pedido);
+                    } else
+                        System.out.print("Pedido ainda não foi aberto. ");
+                    pausa(teclado);
                     break;
-                case 4: 
-                        if(pedido!=null){
-                            pedido.fecharPedido();
-                            double aPagar = pedido.valorTotal()*(1.0 -unicoCliente.desconto());
-                            unicoCliente.addPedido(pedido);
-                            System.out.println(pedido);
-                            System.out.println("Cliente "+unicoCliente.nome+" paga R$ "+aPagar);
-                        }
-                        else
-                            System.out.print("Pedido ainda não foi aberto. ");
-                        pausa(teclado);
+                case 4:
+                    if (pedido != null) {
+                        pedido.fecharPedido();
+                        double aPagar = pedido.valorTotal() * (1.0 - unicoCliente.desconto());
+                        unicoCliente.addPedido(pedido);
+                        System.out.println(pedido);
+                        System.out.println("Cliente " + unicoCliente.nome + " paga R$ " + aPagar);
+                    } else
+                        System.out.print("Pedido ainda não foi aberto. ");
+                    pausa(teclado);
                     break;
                 case 5:
                     break;
                 case 0:
-                    FileOutputStream arqClientes = new FileOutputStream("arqClientes.bin");
-                    ObjectOutputStream streamClientes = new ObjectOutputStream(arqClientes);
-                    streamClientes.writeObject(listaClientes);
-                    streamClientes.close();
+                    salvarClientesNoArquivo(listaClientes, arquivo);
                     break;
             }
-        } while(opcao!=0);
+        } while (opcao != 0);
 
         System.out.println("FIM");
         teclado.close();

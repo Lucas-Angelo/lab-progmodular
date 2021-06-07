@@ -25,6 +25,7 @@ public class LeituraSerializada {
     public void fecharArquivo() {
         try {
             this.streamLeitura.close();
+            this.arqLeitura.close();
         } catch (IOException e) {
             System.err.println("Erro: Falha de I/O, não foi possível fechar o arquivo.");
         }
