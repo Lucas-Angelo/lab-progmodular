@@ -22,116 +22,119 @@
  * SOFTWARE.
  */
 
- /** Cliente com 10% de desconto.
-  *  Demonstração de composição vs herança
-  */
+/**
+ * Cliente com 10% de desconto. Demonstração de composição vs herança
+ */
 
 public abstract class Comida {
-  
-    /** Por enquanto, todos os adicionais tem o mesmo valor */
-    protected static final double VALOR_ADICIONAL;
-    
-    /** Descrição ou nome da comida */
-    protected String descricao;
-	  
-    /** Vetor que armazena o nome dos adicionais */
-    protected String[] adicionais;
-	  
-    /** Variável de controle para a quantidade de adicionais (vetor)*/
-    protected int qtAdicionais;
-    
-    /** Preco inicial da comida, sem adicionais*/
-    protected double precoBase;
-      
-    
-  static{
+
+  /** Por enquanto, todos os adicionais tem o mesmo valor */
+  protected static final double VALOR_ADICIONAL;
+
+  /** Descrição ou nome da comida */
+  protected String descricao;
+
+  /** Vetor que armazena o nome dos adicionais */
+  protected String[] adicionais;
+
+  /** Variável de controle para a quantidade de adicionais (vetor) */
+  protected int qtAdicionais;
+
+  /** Preco inicial da comida, sem adicionais */
+  protected double precoBase;
+
+  static {
     VALOR_ADICIONAL = 1.99;
   }
 
   /**
    * Configura o máximo de ingredientes de uma comida
+   * 
    * @param maxIngred Número máximo de ingredientes (inteiro positivo)
    */
-  private void setMaxAdicionais(int maxIngred){
-    if(maxIngred>0)
+  private void setMaxAdicionais(int maxIngred) {
+    if (maxIngred > 0)
       this.adicionais = new String[maxIngred];
     else
       this.adicionais = new String[1];
   }
-  
+
   /**
    * Construtor.
-   * @param base Preço base
+   * 
+   * @param base      Preço base
    * @param maxIngred Máximo de adicionais
    */
-  public Comida(double base, int maxIngred){
+  public Comida(double base, int maxIngred) {
     this.qtAdicionais = 0;
-    
+
     this.setMaxAdicionais(maxIngred);
-    
-    if(base < 10.0) 
-        this.precoBase = 10.0;
-    else 
-        this.precoBase = base;
+
+    if (base < 10.0)
+      this.precoBase = 10.0;
+    else
+      this.precoBase = base;
   }
 
   /**
    * Inicia a string com o nome da comida.Uso interno.
    */
-	protected void setDescricao(String qual) { 
-	    this.descricao = qual;
-	}
+  protected void setDescricao(String qual) {
+    this.descricao = qual;
+  }
 
   @Override
   /**
    * Descrição: nome, adicionais e valor final.
    */
-    public String toString(){
-        String aux = this.descricao;
-        StringBuilder desc = new StringBuilder(aux);
-        for(int i=0; i<this.qtAdicionais; i++){
-          desc.append(", com "+this.adicionais[i]);
-        }
-        desc.append("- Preço: R$ "+this.precoFinal()+"\n");
-        aux = desc.toString();
-        return aux;
+  public String toString() {
+    String aux = this.descricao;
+    StringBuilder desc = new StringBuilder(aux);
+    for (int i = 0; i < this.qtAdicionais; i++) {
+      desc.append(", com " + this.adicionais[i]);
     }
+    desc.append("- Preço: R$ " + this.precoFinal() + "\n");
+    aux = desc.toString();
+    return aux;
+  }
 
-    /**
-     * Get para quantidade de adicionais
-     * @return Quantidade de adicionais (int)
-     */
-	public int getQtAdicionais() {
-		return qtAdicionais;
-	}
+  /**
+   * Get para quantidade de adicionais
+   * 
+   * @return Quantidade de adicionais (int)
+   */
+  public int getQtAdicionais() {
+    return qtAdicionais;
+  }
 
   /**
    * Get para o máximo de adicionais. Uso interno.
    */
-  private int maxAdicionais(){
-      return this.adicionais.length;
+  private int maxAdicionais() {
+    return this.adicionais.length;
   }
 
   /**
    * Adiciona um ingrediente até o limite
+   * 
    * @param qual Descrição do ingrediente
    * @return Booleano indicando se houve a adição do ingrediente
    */
-	public boolean addIngrediente(String qual) {
+  public boolean addIngrediente(String qual) {
     int limite = maxAdicionais();
-    if(this.qtAdicionais<limite){
-       this.adicionais[this.qtAdicionais] = qual;
-       this.qtAdicionais++;
-       return true;
-    }
-    else
+    if (this.qtAdicionais < limite) {
+      this.adicionais[this.qtAdicionais] = qual;
+      this.qtAdicionais++;
+      return true;
+    } else
       return false;
-	}
-	
+  }
+
   /**
    * Método abstrato para retorno do preço final (base + adicionais diversos)
+   * 
    * @return Valor double (preço)
    */
-	public abstract double precoFinal(); //TODAS as comidas terao preço final
+  public abstract double precoFinal(); // TODAS as comidas terao preço final
 
 }

@@ -35,7 +35,7 @@ public class Cliente implements Serializable {
 
     /** Nome do cliente (livre) */
     public String nome;
-     /** CPF do cliente (sem validação) */
+    /** CPF do cliente (sem validação) */
     private String CPF;
     /** Vetor de pedidos. A ser melhorado */
     private List<Pedido> pedidos;
@@ -79,17 +79,21 @@ public class Cliente implements Serializable {
      * @param p O pedido já pronto
      * @return V/F se foi possível adicionar
      */
-    public boolean addPedido(Pedido p) {
+    public boolean addPedido(Object o) {
         boolean resposta = true;
 
         try {
+            Pedido p = (Pedido) o;
             if (p != null) {
                 this.pedidos.add(p);
                 this.qtPedidos++;
                 this.mudarCategoria();
             } else {
-                throw new NullPointerException("O pedido já deve estar pronto (Não nulo!).");
+                throw new NullPointerException("Erro: O pedido já deve estar pronto (Não nulo!).");
             }
+        } catch (ClassCastException e) {
+            System.err.println("Erro: deve ser adicionado pedidos para a lista de pedidos do cliente!");
+            resposta = false;
         } catch (NullPointerException e) {
             System.err.println(e.getMessage());
             resposta = false;
@@ -124,10 +128,9 @@ public class Cliente implements Serializable {
             this.categoriaFidelidade = teste;
     }
 
-
-     /**
-      * Busca o CPF do cliente
-      */
+    /**
+     * Busca o CPF do cliente
+     */
     public String getCPF() {
         return CPF;
     }

@@ -24,14 +24,16 @@ import java.util.List;
  * SOFTWARE.
  */
 
- /** Interface para terceirizar o desconto do programa de fidelidade */
+/** Interface para terceirizar o desconto do programa de fidelidade */
 public interface IFidelidade {
-    
+
     /**
-     * Recebe uma lista de pedidos e deve calcular o desconto, em % (de 0 a 1), de acordo com a regra desejada
-     * @param pedidos Lista/vetor de pedidos 
+     * Recebe uma lista de pedidos e deve calcular o desconto, em % (de 0 a 1), de
+     * acordo com a regra desejada
+     * 
+     * @param pedidos Lista/vetor de pedidos
      * @return Valor do desconto (% em fração de 0 a 1)
      */
     public double desconto(List<Pedido> pedidos);
-     
+
 }
