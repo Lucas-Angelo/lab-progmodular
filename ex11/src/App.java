@@ -111,7 +111,13 @@ public class App {
      */
     static Comida criarComida(Scanner teclado) {
         System.out.print("Incluir no pedido(1-Pizza 2-Sanduíche): ");
-        int tipo = Integer.parseInt(teclado.nextLine());
+        int tipo = 0;
+        try {
+            tipo = Integer.parseInt(teclado.nextLine());
+        } catch (NumberFormatException e) {
+            System.err.println("Valor inválido inserido");
+        }
+
         Comida nova;
         switch (tipo) {
             case 1:
@@ -126,7 +132,12 @@ public class App {
         }
         if (nova != null) {
             System.out.print("Quantos adicionais: ");
-            int quantos = Integer.parseInt(teclado.nextLine());
+            int quantos = 0;
+            try {
+                quantos = Integer.parseInt(teclado.nextLine());
+            } catch (NumberFormatException e) {
+                System.err.println("Valor inválido inserido");
+            }
             for (int i = 0; i < quantos; i++)
                 nova.addIngrediente("adicional " + (i + 1) + " ");
         }
