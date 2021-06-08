@@ -1,3 +1,6 @@
+import java.io.Serializable;
+import java.util.ArrayList;
+
 /** 
  * MIT License
  *
@@ -26,7 +29,7 @@
  * Cliente com 10% de desconto. Demonstração de composição vs herança
  */
 
-public abstract class Comida {
+public abstract class Comida implements Serializable {
 
   /** Por enquanto, todos os adicionais tem o mesmo valor */
   protected static final double VALOR_ADICIONAL;
@@ -35,10 +38,7 @@ public abstract class Comida {
   protected String descricao;
 
   /** Vetor que armazena o nome dos adicionais */
-  protected String[] adicionais;
-
-  /** Variável de controle para a quantidade de adicionais (vetor) */
-  protected int qtAdicionais;
+  protected ArrayList<String> adicionais;
 
   /** Preco inicial da comida, sem adicionais */
   protected double precoBase;
@@ -47,29 +47,8 @@ public abstract class Comida {
     VALOR_ADICIONAL = 1.99;
   }
 
-  /**
-   * Configura o máximo de ingredientes de uma comida
-   * 
-   * @param maxIngred Número máximo de ingredientes (inteiro positivo)
-   */
-  private void setMaxAdicionais(int maxIngred) {
-    if (maxIngred > 0)
-      this.adicionais = new String[maxIngred];
-    else
-      this.adicionais = new String[1];
-  }
-
-  /**
-   * Construtor.
-   * 
-   * @param base      Preço base
-   * @param maxIngred Máximo de adicionais
-   */
-  public Comida(double base, int maxIngred) {
-    this.qtAdicionais = 0;
-
-    this.setMaxAdicionais(maxIngred);
-
+  private void init(String desc, double base) {
+    this.descricao = desc;
     if (base < 10.0)
       this.precoBase = 10.0;
     else
@@ -77,41 +56,12 @@ public abstract class Comida {
   }
 
   /**
-   * Inicia a string com o nome da comida.Uso interno.
-   */
-  protected void setDescricao(String qual) {
-    this.descricao = qual;
-  }
-
-  @Override
-  /**
-   * Descrição: nome, adicionais e valor final.
-   */
-  public String toString() {
-    String aux = this.descricao;
-    StringBuilder desc = new StringBuilder(aux);
-    for (int i = 0; i < this.qtAdicionais; i++) {
-      desc.append(", com " + this.adicionais[i]);
-    }
-    desc.append("- Preço: R$ " + this.precoFinal() + "\n");
-    aux = desc.toString();
-    return aux;
-  }
-
-  /**
-   * Get para quantidade de adicionais
+   * Construtor.
    * 
-   * @return Quantidade de adicionais (int)
+   * @param base      Preço base
    */
-  public int getQtAdicionais() {
-    return qtAdicionais;
-  }
-
-  /**
-   * Get para o máximo de adicionais. Uso interno.
-   */
-  private int maxAdicionais() {
-    return this.adicionais.length;
+  public Comida(String desc, double base) {
+    init(desc, base);
   }
 
   /**
@@ -121,10 +71,10 @@ public abstract class Comida {
    * @return Booleano indicando se houve a adição do ingrediente
    */
   public boolean addIngrediente(String qual) {
+    int qtAdicionais = getQtAdicionais();
     int limite = maxAdicionais();
-    if (this.qtAdicionais < limite) {
-      this.adicionais[this.qtAdicionais] = qual;
-      this.qtAdicionais++;
+    if (qtAdicionais < limite) {
+      this.adicionais.add(qual);
       return true;
     } else
       return false;
@@ -136,5 +86,34 @@ public abstract class Comida {
    * @return Valor double (preço)
    */
   public abstract double precoFinal(); // TODAS as comidas terao preço final
+
+  /**
+   * Get para o máximo de adicionais. Uso interno.
+   */
+  protected abstract int maxAdicionais();
+
+  /**
+   * Get para quantidade de adicionais
+   * 
+   * @return Quantidade de adicionais (int)
+   */
+  public int getQtAdicionais() {
+    return this.adicionais.size();
+  }
+
+  @Override
+  /**
+   * Descrição: nome, adicionais e valor final.
+   */
+  public String toString() {
+    String aux = this.descricao;
+    StringBuilder desc = new StringBuilder(aux);
+    for (String adicional : adicionais) {
+      desc.append(", com " + adicional);
+    }
+    desc.append("- Preço: R$ " + this.precoFinal() + "\n");
+    aux = desc.toString();
+    return aux;
+  }
 
 }

@@ -39,8 +39,6 @@ public class Cliente implements Serializable {
     private String CPF;
     /** Vetor de pedidos. A ser melhorado */
     private List<Pedido> pedidos;
-    /** Quantidade de pedidos até o momento */
-    private int qtPedidos;
     /**
      * Categoria: injeção de dependência com interface. Composição em lugar de
      * herança
@@ -59,7 +57,6 @@ public class Cliente implements Serializable {
             System.err.println(e.getMessage());
         }
         this.pedidos = new LinkedList<>();
-        this.qtPedidos = 0;
         this.categoriaFidelidade = null;
     }
 
@@ -86,7 +83,6 @@ public class Cliente implements Serializable {
             Pedido p = (Pedido) o;
             if (p != null) {
                 this.pedidos.add(p);
-                this.qtPedidos++;
                 this.mudarCategoria();
             } else {
                 throw new NullPointerException("Erro: O pedido já deve estar pronto (Não nulo!).");
@@ -141,7 +137,7 @@ public class Cliente implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder(this.nome + "\n");
         sb.append("CPF: " + this.CPF + "\n");
-        sb.append("Total de pedidos: " + this.qtPedidos + "\n");
+        sb.append("Total de pedidos: " + this.pedidos.size() + "\n");
         return sb.toString();
     }
 

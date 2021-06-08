@@ -41,9 +41,10 @@ public class Pizza extends Comida {
      * @param borda Booleano para borda recheada
      */
     public Pizza(boolean borda) {
-        super(PRECO_PIZZA, MAX_ADICIONAIS); // construtor da classe mãe
-        this.setDescricao("Pizza ");
+        super("Pizza ", PRECO_PIZZA); // construtor da classe mãe
         this.bordaRecheada = borda;
+        if (this.bordaRecheada)
+            this.descricao += "com bonda recheada ";
     }
 
     @Override
@@ -51,11 +52,14 @@ public class Pizza extends Comida {
      * Preço final. Tem regras próprias do multiplicador e da borda recheada.
      */
     public double precoFinal() {
-
-        double precoFinal = precoBase + (this.qtAdicionais * VALOR_ADICIONAL * MULTIPLICADOR_ADICIONAIS);
+        double precoFinal = precoBase + (this.adicionais.size() * VALOR_ADICIONAL * MULTIPLICADOR_ADICIONAIS);
         if (this.bordaRecheada)
             precoFinal += 7.50;
         return precoFinal;
+    }
+
+    protected int maxAdicionais() {
+        return MAX_ADICIONAIS;
     }
 
 }

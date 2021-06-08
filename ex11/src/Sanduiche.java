@@ -37,8 +37,7 @@ public class Sanduiche extends Comida {
      * Construtor: indica se tem o dobro de carne
      */
     public Sanduiche(boolean dobro) {
-        super(PRECO_SANDUICHE, MAX_ADICIONAIS); // construtor da classe mãe
-        this.setDescricao("Sanduíche ");
+        super("Sanduíche ", PRECO_SANDUICHE); // construtor da classe mãe
         this.dobroDeCarne = dobro;
         if (this.dobroDeCarne)
             this.descricao += "com duas carnes ";
@@ -49,9 +48,13 @@ public class Sanduiche extends Comida {
      */
     @Override
     public double precoFinal() {
-        double precoFinal = precoBase + (this.qtAdicionais * VALOR_ADICIONAL);
+        double precoFinal = precoBase + (this.adicionais.size() * VALOR_ADICIONAL);
         if (this.dobroDeCarne)
             precoFinal += 5.0;
         return precoFinal;
+    }
+
+    protected int maxAdicionais() {
+        return MAX_ADICIONAIS;
     }
 }
