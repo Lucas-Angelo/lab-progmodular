@@ -31,7 +31,9 @@ public class EscritaSerializada<T> {
 
     public void escrever(List<T> objetos) {
         try {
-            this.streamEscrita.writeObject(objetos);
+            for (T t : objetos) {
+                this.streamEscrita.writeObject(t);
+            }
         } catch (InvalidClassException e) {
             System.err.println("Erro: Classe do objeto para salvar inválida, não foi possível escrever no arquivo.");
         } catch (NotSerializableException e) {

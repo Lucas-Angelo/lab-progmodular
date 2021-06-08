@@ -59,17 +59,14 @@ public class App {
     }
 
     public static void salvarClientesNoArquivo(List<Cliente> listaClientes, String arquivo) {
-        File f = new File(arquivo);
-        if (f.exists() && !f.isDirectory()) {
-            EscritaSerializada<Cliente> escrita = new EscritaSerializada<Cliente>();
-            escrita.abrirArquivo(arquivo);
-            try {
-                escrita.escrever(listaClientes);
-            } catch (ClassCastException e) {
-                System.err.println("Erro: Fallha ao fazer o casting dos objetos salvos no arquivo para Cliente, não foi possível carregar os clientes.");
-            }
-            escrita.fecharArquivo();
+        EscritaSerializada<Cliente> escrita = new EscritaSerializada<Cliente>();
+        escrita.abrirArquivo(arquivo);
+        try {
+            escrita.escrever(listaClientes);
+        } catch (ClassCastException e) {
+            System.err.println("Erro: Fallha ao fazer o casting dos objetos salvos no arquivo para Cliente, não foi possível carregar os clientes.");
         }
+        escrita.fecharArquivo();
     }
 
     /**
