@@ -24,6 +24,8 @@
  */
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /** Classe pedido. Um pedido contém várias comidas (agregação) */
 public class Pedido implements Serializable {
@@ -34,12 +36,10 @@ public class Pedido implements Serializable {
 
     /** ID do pedido. Sequencial */
     private int idPedido;
-    /** Quantidade de comidas adicionadas */
-    private int quantComidas;
     /** Sumário/descrição do pedido */
     private String sumario;
     /** Vetor com comidas (a ser melhorado) */
-    private Comida[] comidas;
+    private List<Comida> comidas;
     /** Pedido aberto ou fechado */
     private boolean fechado;
     /** Data do pedido */
@@ -51,7 +51,7 @@ public class Pedido implements Serializable {
 
     /** Construtor, cria pedido vazio */
     public Pedido() {
-        this.comidas = new Comida[MAXCOMIDAS];
+        this.comidas = new ArrayList<Comida>(MAXCOMIDAS);
         this.fechado = false;
     }
 
@@ -61,7 +61,7 @@ public class Pedido implements Serializable {
      * @return Quantidade de comidas
      */
     public int getQuantComidas() {
-        return this.quantComidas;
+        return this.comidas.size();
     }
 
     /**
@@ -80,17 +80,12 @@ public class Pedido implements Serializable {
      * @return V/F para o sucesso da operação de adicionar
      */
     public boolean addComida(Comida c) {
-
         boolean resposta = false;
-        if (!this.fechado) {
-            if (this.quantComidas < MAXCOMIDAS) {
-                comidas[quantComidas] = c;
-                this.quantComidas++;
-                resposta = true;
-            }
+        if (!this.fechado && getQuantComidas() < MAXCOMIDAS) {
+            this.comidas.add(c);
+            resposta = true;
         }
         return resposta;
-
     }
 
     /**
@@ -100,8 +95,8 @@ public class Pedido implements Serializable {
      */
     public double valorTotal() {
         double valor = 0.0;
-        for (int i = 0; i < this.quantComidas; i++) {
-            valor += comidas[i].precoFinal();
+        for (Comida comida : this.comidas) {
+            valor += comida.precoFinal();
         }
         return valor;
     }
@@ -113,10 +108,10 @@ public class Pedido implements Serializable {
      */
     private String sumario() {
         if (!this.fechado) {
-            StringBuilder relat = new StringBuilder("PEDIDO Nº " + this.idPedido + "\n");
+            StringBuilder relat = new StringBuilder("PEDIDO Nº " + this.idPedido + "\nCOMIDAS:\n");
 
-            for (int i = 0; i < quantComidas; i++) {
-                relat.append(comidas[i].toString());
+            for (Comida comida : this.comidas) {
+                relat.append(comida.toString() + "\n");
             }
 
             this.sumario = relat.toString();
@@ -132,7 +127,7 @@ public class Pedido implements Serializable {
      */
     public boolean fecharPedido() {
         boolean resposta = true;
-        if (this.quantComidas == 0)
+        if (this.comidas.size() == 0)
             resposta = false;
         else {
             if (!this.fechado) {

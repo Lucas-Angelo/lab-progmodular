@@ -108,7 +108,7 @@ public abstract class Comida implements Serializable {
    */
   public String toString() {
     String aux = this.descricao;
-    StringBuilder desc = new StringBuilder(aux + ".\n");
+    StringBuilder desc = new StringBuilder(aux + "\n");
     if(!this.adicionais.isEmpty())
       desc.append("Adicionais: ");
     for (String adicional : this.adicionais) {
