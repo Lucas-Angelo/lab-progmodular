@@ -53,6 +53,7 @@ public abstract class Comida implements Serializable {
       this.precoBase = 10.0;
     else
       this.precoBase = base;
+    this.adicionais = new ArrayList<String>(maxAdicionais());
   }
 
   /**
@@ -107,11 +108,13 @@ public abstract class Comida implements Serializable {
    */
   public String toString() {
     String aux = this.descricao;
-    StringBuilder desc = new StringBuilder(aux);
-    for (String adicional : adicionais) {
-      desc.append(", com " + adicional);
+    StringBuilder desc = new StringBuilder(aux + ".\n");
+    if(!this.adicionais.isEmpty())
+      desc.append("Adicionais: ");
+    for (String adicional : this.adicionais) {
+      desc.append(adicional + ", ");
     }
-    desc.append("- Preço: R$ " + this.precoFinal() + "\n");
+    desc.append("\nPreço: R$ " + this.precoFinal() + ".\n");
     aux = desc.toString();
     return aux;
   }

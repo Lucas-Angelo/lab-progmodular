@@ -40,7 +40,7 @@ public class Sanduiche extends Comida {
         super("Sanduíche ", PRECO_SANDUICHE); // construtor da classe mãe
         this.dobroDeCarne = dobro;
         if (this.dobroDeCarne)
-            this.descricao += "com duas carnes ";
+            this.descricao += "com duas carnes.";
     }
 
     /**
