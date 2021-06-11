@@ -140,4 +140,22 @@ public class Cliente implements Serializable {
         return sb.toString();
     }
 
+
+    @Override
+    public String toString(){
+        return "";
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        try{
+            Cliente clt = (Cliente)obj;
+            return (this.CPF.equals(clt.CPF));
+        }catch(ClassCastException ex){
+            System.err.println("Cast/comparação inválida");
+            return false;
+        }
+    }
+
+
 }
