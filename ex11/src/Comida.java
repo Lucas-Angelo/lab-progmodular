@@ -118,16 +118,20 @@ public abstract class Comida {
    * Adiciona um ingrediente até o limite
    * 
    * @param qual Descrição do ingrediente
-   * @return Booleano indicando se houve a adição do ingrediente
    */
-  public boolean addIngrediente(String qual) {
+  public void addIngrediente(String qual){
     int limite = maxAdicionais();
-    if (this.qtAdicionais < limite) {
-      this.adicionais[this.qtAdicionais] = qual;
-      this.qtAdicionais++;
-      return true;
-    } else
-      return false;
+    try{
+      if (this.qtAdicionais < limite) {
+        this.adicionais[this.qtAdicionais] = qual;
+        this.qtAdicionais++;
+        
+      } else{
+        throw new Exception ("Limite de Adicionais");
+      }
+    }catch(Exception e){
+        System.err.print(e.getMessage());
+    }
   }
 
   /**

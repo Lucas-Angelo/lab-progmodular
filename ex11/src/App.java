@@ -109,7 +109,7 @@ public class App {
      * @param teclado Scanner de leitura
      * @return Uma comida ou nulo
      */
-    static Comida criarComida(Scanner teclado) {
+    static Comida criarComida(Scanner teclado) throws Exception{
         System.out.print("Incluir no pedido(1-Pizza 2-Sanduíche): ");
         int tipo = 0;
         try {
@@ -127,10 +127,10 @@ public class App {
                 nova = new Sanduiche(false);
                 break;
             default:
-                nova = null;
-                break;
+                throw new Exception(" Comida inválida ");
+                
         }
-        if (nova != null) {
+        
             System.out.print("Quantos adicionais: ");
             int quantos = 0;
             try {
@@ -140,7 +140,7 @@ public class App {
             }
             for (int i = 0; i < quantos; i++)
                 nova.addIngrediente("adicional " + (i + 1) + " ");
-        }
+        
         return nova;
     }
 

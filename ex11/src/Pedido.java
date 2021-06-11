@@ -79,17 +79,21 @@ public class Pedido implements Serializable {
      * @param c A comida a ser adicionada
      * @return V/F para o sucesso da operação de adicionar
      */
-    public boolean addComida(Comida c) {
+    public void addComida(Comida c) {
 
-        boolean resposta = false;
-        if (!this.fechado) {
-            if (this.quantComidas < MAXCOMIDAS) {
-                comidas[quantComidas] = c;
-                this.quantComidas++;
-                resposta = true;
+        try{
+            if (!this.fechado) {
+                if (this.quantComidas < MAXCOMIDAS) {
+                    comidas[quantComidas] = c;
+                    this.quantComidas++;
+                }
             }
+            else{
+                throw new Exception("Pedido fechado.");
+            }
+        }catch (Exception e){
+            System.err.print(e.getMessage());
         }
-        return resposta;
 
     }
 

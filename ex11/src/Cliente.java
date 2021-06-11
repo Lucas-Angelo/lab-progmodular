@@ -79,9 +79,8 @@ public class Cliente implements Serializable {
      * @param p O pedido já pronto
      * @return V/F se foi possível adicionar
      */
-    public boolean addPedido(Object o) {
-        boolean resposta = true;
-
+    public void addPedido(Object o) {
+        
         try {
             Pedido p = (Pedido) o;
             if (p != null) {
@@ -93,13 +92,9 @@ public class Cliente implements Serializable {
             }
         } catch (ClassCastException e) {
             System.err.println("Erro: deve ser adicionado pedidos para a lista de pedidos do cliente!");
-            resposta = false;
         } catch (NullPointerException e) {
             System.err.println(e.getMessage());
-            resposta = false;
         }
-
-        return resposta;
     }
 
     /**
