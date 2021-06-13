@@ -30,7 +30,7 @@ public class Pedido implements Serializable {
     /** Constante: máximo de comidas por pedido */
     private static final int MAXCOMIDAS;
     /** Atributo de classe para gerar novos IDs */
-    private static int ultPedido = 0;
+    private static int ultPedido;
 
     /** ID do pedido. Sequencial */
     private int idPedido;
@@ -47,10 +47,12 @@ public class Pedido implements Serializable {
 
     static {
         MAXCOMIDAS = 10;
+        ultPedido = 0;
     }
 
     /** Construtor, cria pedido vazio */
     public Pedido() {
+        this.idPedido = ultPedido;
         this.comidas = new Comida[MAXCOMIDAS];
         this.fechado = false;
     }
@@ -133,20 +135,20 @@ public class Pedido implements Serializable {
      * fechamento.
      * 
      * @return V/F para o fechamento do pedido.
+     * @throws Exception
      */
-    public boolean fecharPedido() {
-        boolean resposta = true;
+    public void fecharPedido() throws Exception {
         if (this.quantComidas == 0)
-            resposta = false;
-        else {
-            if (!this.fechado) {
-                this.dataPedido = new Data(5, 4, 2021);
-                this.idPedido = ++ultPedido;
-                this.sumario();
-                this.fechado = true;
-            }
+            throw new Exception("Erro: não é possível fechar um pedido sem comidas.");
+        
+        if (this.fechado) {
+            throw new Exception("Erro: não é possível fechar um pedido já fechado.");
         }
-        return resposta;
+
+        this.dataPedido = new Data(5, 4, 2021);
+        this.sumario();
+        this.fechado = true;
+        ultPedido++;
     }
 
     /**

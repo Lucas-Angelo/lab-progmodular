@@ -31,7 +31,7 @@ import java.io.Serializable;
  * 
  * @author João Caram
  */
-public class Cliente implements Serializable,  Comparable {
+public class Cliente implements Serializable, Comparable<Object> {
 
     /** Nome do cliente (livre) */
     public String nome;
@@ -80,7 +80,7 @@ public class Cliente implements Serializable,  Comparable {
      * @return V/F se foi possível adicionar
      */
     public void addPedido(Object o) {
-        
+
         try {
             Pedido p = (Pedido) o;
             if (p != null) {
@@ -141,11 +141,11 @@ public class Cliente implements Serializable,  Comparable {
     }
 
     @Override
-    public boolean equals(Object obj){
-        try{
-            Cliente clt = (Cliente)obj;
+    public boolean equals(Object obj) {
+        try {
+            Cliente clt = (Cliente) obj;
             return (this.CPF.equals(clt.CPF));
-        }catch(ClassCastException ex){
+        } catch (ClassCastException ex) {
             System.err.println("Cast inválido");
             return false;
         }
@@ -153,10 +153,10 @@ public class Cliente implements Serializable,  Comparable {
 
     @Override
     public int compareTo(Object obj) {
-        Cliente clt = (Cliente)obj;
-        int resp=  Integer.parseInt(this.CPF) == Integer.parseInt(clt.getCPF()) ? 0 : (Integer.parseInt(this.CPF) > Integer.parseInt(clt.getCPF()) ? 1:-1);
+        Cliente clt = (Cliente) obj;
+        int resp = Integer.parseInt(this.CPF) == Integer.parseInt(clt.getCPF()) ? 0
+                : (Integer.parseInt(this.CPF) > Integer.parseInt(clt.getCPF()) ? 1 : -1);
         return resp;
     }
-
 
 }

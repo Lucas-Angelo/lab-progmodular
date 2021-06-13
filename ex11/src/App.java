@@ -50,7 +50,8 @@ public class App {
                     listaClientes.add((Cliente) objeto);
                 }
             } catch (ClassCastException e) {
-                System.err.println("Erro: Fallha ao fazer o casting dos objetos salvos no arquivo para Cliente, não foi possível carregar os clientes.");
+                System.err.println(
+                        "Erro: Fallha ao fazer o casting dos objetos salvos no arquivo para Cliente, não foi possível carregar os clientes.");
             }
             leitura.fecharArquivo();
         }
@@ -64,7 +65,8 @@ public class App {
         try {
             escrita.escrever(listaClientes);
         } catch (ClassCastException e) {
-            System.err.println("Erro: Fallha ao fazer o casting dos objetos salvos no arquivo para Cliente, não foi possível carregar os clientes.");
+            System.err.println(
+                    "Erro: Fallha ao fazer o casting dos objetos salvos no arquivo para Cliente, não foi possível carregar os clientes.");
         }
         escrita.fecharArquivo();
     }
@@ -103,45 +105,22 @@ public class App {
     // #endregion
 
     // #region Métodos de controle
-    /**
-     * Cria uma comida de acordo com opções do menu (método "fábrica")
-     * 
-     * @param teclado Scanner de leitura
-     * @return Uma comida ou nulo
-     */
-    static Comida criarComida(Scanner teclado) throws Exception{
-        System.out.print("Incluir no pedido(1-Pizza 2-Sanduíche): ");
-        int tipo = 0;
-        try {
-            tipo = Integer.parseInt(teclado.nextLine());
-        } catch (NumberFormatException e) {
-            System.err.println("Valor inválido inserido");
+
+    static Optional<Cliente> buscarCliente(Scanner teclado, List<Cliente> listaClientes) {
+        Optional<Cliente> cliente = Optional.empty();
+
+        System.out.print("Digite o nome do cliente: ");
+        String nome = teclado.nextLine();
+        System.out.print("Digite o CPF do cliente: ");
+        String cpf = teclado.nextLine().replaceAll("[^0-9]", "");
+
+        cliente = listaClientes.stream().filter(clienteStream -> new Cliente(nome, cpf).equals(clienteStream)).findFirst();
+
+        if(cliente.isEmpty()) {
+            System.err.println("Cliente não cadastrado.");
         }
 
-        Comida nova;
-        switch (tipo) {
-            case 1:
-                nova = new Pizza(false);
-                break;
-            case 2:
-                nova = new Sanduiche(false);
-                break;
-            default:
-                throw new Exception(" Comida inválida ");
-                
-        }
-        
-            System.out.print("Quantos adicionais: ");
-            int quantos = 0;
-            try {
-                quantos = Integer.parseInt(teclado.nextLine());
-            } catch (NumberFormatException e) {
-                System.err.println("Valor inválido inserido");
-            }
-            for (int i = 0; i < quantos; i++)
-                nova.addIngrediente("adicional " + (i + 1) + " ");
-        
-        return nova;
+        return cliente;
     }
 
     /**
@@ -149,9 +128,104 @@ public class App {
      * 
      * @param p O pedido a ser apagado
      */
-    static void criarNovo(Pedido p) {
-        p = new Pedido();
-        System.out.print("Novo pedido criado. ");
+    static Optional<Pedido> criarNovo(Optional<Pedido> pedido) {
+        if(pedido.isEmpty() || pedido.get().fechado()) {
+            pedido = Optional.of(new Pedido());
+            System.out.println("Novo pedido criado.");
+        } else {
+            System.err.println("Erro: é necessário fechar o pedido aberto primeiro.");
+        }  
+        return pedido;
+    }
+
+    /**
+     * Cria uma comida de acordo com opções do menu (método "fábrica")
+     * 
+     * @param teclado Scanner de leitura
+     * @return Uma comida ou nulo
+     */
+    static Optional<Comida> criarComida(Scanner teclado) throws Exception {
+        int tipo = 0;
+        System.out.println("Menu comidas:");
+        System.out.println("1 - Pizza");
+        System.out.println("2 - Sanduíche");
+        System.out.print("Incluir no pedido: ");
+        try {
+            tipo = Integer.parseInt(teclado.nextLine());
+        } catch (NumberFormatException e) {
+            System.err.println("Valor inválido inserido");
+        }
+
+        Optional<Comida> nova = Optional.empty();
+        switch (tipo) {
+            case 1:
+                boolean borda = false;
+                System.out.println("\nDeseja borda recheada?");
+                System.out.println("1 - Sim");
+                System.out.println("2 - Não");
+                System.out.print("Digite a opção: ");
+                try {
+                    borda = (Integer.parseInt(teclado.nextLine()) == 1) ? true : false;
+                } catch (NumberFormatException e) {
+                    System.err.println("Valor inválido inserido");
+                }
+                nova = Optional.of(new Pizza(borda));
+                break;
+            case 2:
+                boolean dobro = false;
+                System.out.println("\nDeseja duas carnes?");
+                System.out.println("1 - Sim");
+                System.out.println("2 - Não");
+                System.out.print("Digite a opção: ");
+                try {
+                    dobro = (Integer.parseInt(teclado.nextLine()) == 1) ? true : false;
+                } catch (NumberFormatException e) {
+                    System.err.println("Valor inválido inserido");
+                }
+                nova = Optional.of(new Sanduiche(dobro));
+                break;
+            default:
+                throw new Exception("Comida inválida");
+        }
+
+        System.out.print("\nQuantos adicionais: ");
+        int quantos = 0;
+        try {
+            quantos = Integer.parseInt(teclado.nextLine());
+        } catch (NumberFormatException e) {
+            System.err.println("Valor inválido inserido");
+        }
+        try {
+            for (int i = 0; i < quantos; i++)
+                nova.get().addIngrediente("adicional " + (i + 1) + " ");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return nova;
+    }
+
+    static void imprimirPedido(Optional<Pedido> pedido) {
+        if (!pedido.isEmpty()) {
+            System.out.println(pedido.get());
+        } else
+            System.out.print("Pedido ainda não foi aberto. ");
+    }
+
+    static Optional<Pedido> fecharPedido(Optional<Pedido> pedido, Optional<Cliente> cliente) {
+        if (!pedido.isEmpty()) {
+            try {
+                pedido.get().fecharPedido();
+                double aPagar = pedido.get().valorTotal() * (1.0 - cliente.get().desconto());
+                cliente.get().addPedido(pedido.get());
+                System.out.println(pedido.get());
+                System.out.println("Cliente " + cliente.get().nome + " paga R$ " + aPagar);
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        } else
+            System.out.print("Pedido ainda não foi aberto. ");
+        return pedido;
     }
     // #endregion
 
@@ -170,8 +244,8 @@ public class App {
             listaClientes.add(new Cliente("Bianca Jersey", "557.890.123-44"));
         }
 
-        Pedido pedido = null;
-        Cliente unicoCliente = null;
+        Optional<Pedido> pedido = Optional.empty();
+        Optional<Cliente> cliente = Optional.empty();
         int opcao = -1;
 
         do {
@@ -182,57 +256,32 @@ public class App {
             // e modularização em métodos específicos na região de métodos de controle.
             switch (opcao) {
                 case 1:
-                    if (pedido == null || pedido.fechado()) {
-                        while (unicoCliente == null) {
-                            System.out.println("Digite o CPF do Cliente (Ou digite 0 para sair)");
-                            String cpf = teclado.nextLine().replaceAll("[^0-9]", "");
-                            if (cpf.equals("0"))
-                                break;
-                            unicoCliente = listaClientes.stream().filter(cliente -> cpf.equals(cliente.getCPF()))
-                                    .findFirst().orElse(null);
-                            if (unicoCliente == null)
-                                System.out.println("Cliente não cadastrado");
-                        }
-
-                        if (unicoCliente != null) {
-                            pedido = new Pedido();
-                            System.out.print("Novo pedido criado. ");
-                        } else
-                            System.out.print("Pedido não criado. Cliente não definido \n");
-                    } else
-                        System.out.print("Ainda há pedido aberto. ");
+                    cliente = buscarCliente(teclado, listaClientes);
+                    if(!cliente.isEmpty()) {
+                        pedido = criarNovo(pedido);
+                    } else {
+                        System.err.println("Não foi possível criar o pedido.");
+                    }
                     pausa(teclado);
                     break;
                 case 2:
-                    if (pedido != null) {
-                        Comida aux = criarComida(teclado);
-                        if (aux != null) {
-                            if (pedido.addComida(aux))
-                                System.out.println("Adicionado: " + aux);
-                            else
-                                System.out.println("Não foi possível adicionar.");
-                        } else
-                            System.out.print("Inválido. Favor tentar novamente. ");
+                    Optional<Comida> aux = criarComida(teclado);
+                    if (!pedido.isEmpty()) {
+                        try {
+                            pedido.get().addComida(aux.get());
+                        } catch (Exception e) {
+                            System.err.println(e.getMessage());
+                        }
                     } else
                         System.out.print("Pedido ainda não foi aberto. ");
                     pausa(teclado);
                     break;
                 case 3:
-                    if (pedido != null) {
-                        System.out.println(pedido);
-                    } else
-                        System.out.print("Pedido ainda não foi aberto. ");
+                    imprimirPedido(pedido);
                     pausa(teclado);
                     break;
                 case 4:
-                    if (pedido != null) {
-                        pedido.fecharPedido();
-                        double aPagar = pedido.valorTotal() * (1.0 - unicoCliente.desconto());
-                        unicoCliente.addPedido(pedido);
-                        System.out.println(pedido);
-                        System.out.println("Cliente " + unicoCliente.nome + " paga R$ " + aPagar);
-                    } else
-                        System.out.print("Pedido ainda não foi aberto. ");
+                    pedido = fecharPedido(pedido, cliente);
                     pausa(teclado);
                     break;
                 case 5:
