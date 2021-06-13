@@ -148,11 +148,81 @@ public class App {
      * Apaga o pedido p e cria um novo
      * 
      * @param p O pedido a ser apagado
+     * @return O pedido que foi criado
      */
-    static void criarNovo(Pedido p) {
-        p = new Pedido();
+    static Optional<Pedido> criarNovo(Optional<Pedido> p) {
+        p = Optional.of( new Pedido() );
         System.out.print("Novo pedido criado. ");
+        return p;
     }
+
+    /**
+     * Fecha o pedido de um cliente
+     * 
+     * @param p O pedido a ser fechado
+     * @param c Optional de cliente vinculado ao pedido p
+     */
+    static void fechar(Pedido p, Optional<Cliente> c) {
+        c.ifPresentOrElse(
+            (cliente)->{
+                p.fecharPedido();
+                double aPagar = p.valorTotal() * (1.0 - cliente.desconto());
+                cliente.addPedido(p);
+                System.out.println(p);
+                System.out.println("Cliente " + cliente.nome + " paga R$ " + aPagar);
+            }, 
+            ()->{ System.out.print("Não foi possível fechar o pedido, não há cliente vinculado"); }
+        );
+        
+    }
+
+    /**
+     * Adiciona uma comida a um pedido
+     * 
+     * @param teclado Scanner de entrada
+     * @param p O pedido a ser adicionado uma comida
+     */
+    static void adicionar(Scanner teclado, Pedido p) {
+        Optional<Comida> aux = Optional.ofNullable( criarComida(teclado) ) ;
+        aux.ifPresentOrElse(
+            (comida)->{
+                if (p.addComida(comida))
+                    System.out.println("Adicionado: " + comida);
+                else
+                    System.out.println("Não foi possível adicionar.");
+            },
+            ()->{ System.out.print("Inválido. Favor tentar novamente. "); } 
+            
+        );
+            
+    }
+
+    /**
+     * Busca e retorna um cliente se não houver um
+     * 
+     * @param teclado Scanner de leitura
+     * @param c cliente atual, se existir, nada é feito
+     * @param lstC lista de clientes na qual a busca será realizada
+     * @return Optional de cliente buscado
+     */
+    static Optional<Cliente> getCliente(Scanner teclado, Optional<Cliente> c, List<Cliente> lstC) {
+        while (c.isEmpty()) {
+            System.out.println("Digite o CPF do Cliente (Ou digite 0 para sair)");
+            String cpf = teclado.nextLine().replaceAll("[^0-9]", "");
+            if (cpf.equals("0"))
+                break;
+            c =  Optional.ofNullable(
+                lstC.stream()
+                    .filter(cliente -> cpf.equals(cliente.getCPF()))
+                    .findFirst()
+                    .orElse(null)
+            );
+            if (c.isEmpty())
+                System.out.println("Cliente não cadastrado");
+        }
+        return c;
+    }
+    
     // #endregion
 
     public static void main(String[] args) throws Exception {
@@ -170,8 +240,8 @@ public class App {
             listaClientes.add(new Cliente("Bianca Jersey", "557.890.123-44"));
         }
 
-        Pedido pedido = null;
-        Cliente unicoCliente = null;
+        Optional<Pedido> pedido = Optional.empty();
+        Optional<Cliente> unicoCliente = Optional.empty();
         int opcao = -1;
 
         do {
@@ -182,57 +252,36 @@ public class App {
             // e modularização em métodos específicos na região de métodos de controle.
             switch (opcao) {
                 case 1:
-                    if (pedido == null || pedido.fechado()) {
-                        while (unicoCliente == null) {
-                            System.out.println("Digite o CPF do Cliente (Ou digite 0 para sair)");
-                            String cpf = teclado.nextLine().replaceAll("[^0-9]", "");
-                            if (cpf.equals("0"))
-                                break;
-                            unicoCliente = listaClientes.stream().filter(cliente -> cpf.equals(cliente.getCPF()))
-                                    .findFirst().orElse(null);
-                            if (unicoCliente == null)
-                                System.out.println("Cliente não cadastrado");
-                        }
-
-                        if (unicoCliente != null) {
-                            pedido = new Pedido();
-                            System.out.print("Novo pedido criado. ");
-                        } else
+                    if (pedido.isEmpty() || pedido.get().fechado()) {
+                        unicoCliente = getCliente(teclado, unicoCliente, listaClientes);
+                        if (unicoCliente.isPresent())
+                            pedido = criarNovo(pedido);
+                        else
                             System.out.print("Pedido não criado. Cliente não definido \n");
                     } else
                         System.out.print("Ainda há pedido aberto. ");
                     pausa(teclado);
                     break;
                 case 2:
-                    if (pedido != null) {
-                        Comida aux = criarComida(teclado);
-                        if (aux != null) {
-                            if (pedido.addComida(aux))
-                                System.out.println("Adicionado: " + aux);
-                            else
-                                System.out.println("Não foi possível adicionar.");
-                        } else
-                            System.out.print("Inválido. Favor tentar novamente. ");
-                    } else
-                        System.out.print("Pedido ainda não foi aberto. ");
+                    pedido.ifPresentOrElse(
+                        (p)->{ adicionar(teclado, p); }, 
+                        ()->{ System.out.print("Pedido ainda não foi aberto. "); }
+                    );
                     pausa(teclado);
                     break;
                 case 3:
-                    if (pedido != null) {
-                        System.out.println(pedido);
-                    } else
-                        System.out.print("Pedido ainda não foi aberto. ");
+                    pedido.ifPresentOrElse(
+                        (p)->{ System.out.println(p); }, 
+                        ()->{ System.out.print("Pedido ainda não foi aberto. "); }
+                    );
                     pausa(teclado);
                     break;
                 case 4:
-                    if (pedido != null) {
-                        pedido.fecharPedido();
-                        double aPagar = pedido.valorTotal() * (1.0 - unicoCliente.desconto());
-                        unicoCliente.addPedido(pedido);
-                        System.out.println(pedido);
-                        System.out.println("Cliente " + unicoCliente.nome + " paga R$ " + aPagar);
-                    } else
-                        System.out.print("Pedido ainda não foi aberto. ");
+                    Optional<Cliente> cliente = unicoCliente;
+                    pedido.ifPresentOrElse(
+                        (p)->{ fechar(p,cliente); },
+                        ()->{ System.out.print("Pedido ainda não foi aberto. "); }
+                    );
                     pausa(teclado);
                     break;
                 case 5:
@@ -241,6 +290,7 @@ public class App {
                     salvarClientesNoArquivo(listaClientes, arquivo);
                     break;
             }
+            
         } while (opcao != 0);
 
         System.out.println("FIM");
