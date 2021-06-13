@@ -109,12 +109,10 @@ public class App {
     static Optional<Cliente> buscarCliente(Scanner teclado, List<Cliente> listaClientes) {
         Optional<Cliente> cliente = Optional.empty();
 
-        System.out.print("Digite o nome do cliente: ");
-        String nome = teclado.nextLine();
         System.out.print("Digite o CPF do cliente: ");
         String cpf = teclado.nextLine().replaceAll("[^0-9]", "");
 
-        cliente = listaClientes.stream().filter(clienteStream -> new Cliente(nome, cpf).equals(clienteStream)).findFirst();
+        cliente = listaClientes.stream().filter(clienteStream -> cpf.equals(clienteStream.getCPF())).findFirst();
 
         if(cliente.isEmpty()) {
             System.err.println("Cliente não cadastrado.");
@@ -165,7 +163,7 @@ public class App {
                 System.out.println("2 - Não");
                 System.out.print("Digite a opção: ");
                 try {
-                    borda = (Integer.parseInt(teclado.nextLine()) == 1) ? true : false;
+                    borda = (Integer.parseInt(teclado.nextLine()) == 1);
                 } catch (NumberFormatException e) {
                     System.err.println("Valor inválido inserido");
                 }
@@ -178,7 +176,7 @@ public class App {
                 System.out.println("2 - Não");
                 System.out.print("Digite a opção: ");
                 try {
-                    dobro = (Integer.parseInt(teclado.nextLine()) == 1) ? true : false;
+                    dobro = (Integer.parseInt(teclado.nextLine()) == 1);
                 } catch (NumberFormatException e) {
                     System.err.println("Valor inválido inserido");
                 }
@@ -197,7 +195,7 @@ public class App {
         }
         try {
             for (int i = 0; i < quantos; i++)
-                nova.get().addIngrediente("adicional " + (i + 1) + " ");
+                nova.get().addIngrediente("Adicional: " + (i + 1));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -224,7 +222,7 @@ public class App {
                 System.err.println(e.getMessage());
             }
         } else
-            System.out.print("Pedido ainda não foi aberto. ");
+            System.out.print("Pedido ainda não foi aberto.\n");
         return pedido;
     }
     // #endregion

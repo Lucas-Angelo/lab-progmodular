@@ -31,7 +31,7 @@ import java.io.Serializable;
  * 
  * @author João Caram
  */
-public class Cliente implements Serializable, Comparable<Object> {
+public class Cliente implements Serializable, Comparable<String> {
 
     /** Nome do cliente (livre) */
     public String nome;
@@ -140,22 +140,14 @@ public class Cliente implements Serializable, Comparable<Object> {
         return sb.toString();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        try {
-            Cliente clt = (Cliente) obj;
-            return (this.CPF.equals(clt.CPF));
-        } catch (ClassCastException ex) {
-            System.err.println("Cast inválido");
-            return false;
-        }
+    public boolean equals(String cpf) {
+        return (this.CPF.equals(cpf));
     }
 
     @Override
-    public int compareTo(Object obj) {
-        Cliente clt = (Cliente) obj;
-        int resp = Integer.parseInt(this.CPF) == Integer.parseInt(clt.getCPF()) ? 0
-                : (Integer.parseInt(this.CPF) > Integer.parseInt(clt.getCPF()) ? 1 : -1);
+    public int compareTo(String cpf) {
+        int resp = Integer.parseInt(this.CPF) == Integer.parseInt(cpf) ? 0
+                : (Integer.parseInt(this.CPF) > Integer.parseInt(cpf) ? 1 : -1);
         return resp;
     }
 

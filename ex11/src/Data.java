@@ -1,3 +1,5 @@
+import java.io.Serializable;
+
 /** 
  * MIT License
  *
@@ -25,7 +27,7 @@
  /**
   * Classe Data para uso próprio.
   */
-public class Data{
+public class Data implements Serializable {
     private static final Data MINDATA;
     private static Data maxData;
     

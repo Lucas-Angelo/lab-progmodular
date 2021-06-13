@@ -1,3 +1,5 @@
+import java.io.Serializable;
+
 /** 
  * MIT License
  *
@@ -26,7 +28,7 @@
  * Cliente com 10% de desconto. Demonstração de composição vs herança
  */
 
-public abstract class Comida {
+public abstract class Comida implements Serializable {
 
   /** Por enquanto, todos os adicionais tem o mesmo valor */
   protected static final double VALOR_ADICIONAL;
@@ -90,7 +92,7 @@ public abstract class Comida {
   public String toString() {
     StringBuilder desc = new StringBuilder("\t" + this.descricao + ".\n" + "\tAdicionais: \n");
     for (int i = 0; i < this.qtAdicionais; i++) {
-      desc.append("\t\tAdicional: " + this.adicionais[i] + "\n");
+      desc.append("\t\t" + this.adicionais[i] + "\n");
     }
     desc.append("\tPreço: R$ " + this.precoFinal() + "\n\n");
     return desc.toString();
