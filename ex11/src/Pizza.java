@@ -42,8 +42,10 @@ public class Pizza extends Comida {
      */
     public Pizza(boolean borda) {
         super(PRECO_PIZZA, MAX_ADICIONAIS); // construtor da classe mãe
-        this.setDescricao("Pizza ");
+        this.setDescricao("Pizza");
         this.bordaRecheada = borda;
+        if (this.bordaRecheada)
+            this.descricao += " com borda recheada";
     }
 
     @Override

@@ -88,14 +88,12 @@ public abstract class Comida {
    * Descrição: nome, adicionais e valor final.
    */
   public String toString() {
-    String aux = this.descricao;
-    StringBuilder desc = new StringBuilder(aux);
+    StringBuilder desc = new StringBuilder("\t" + this.descricao + ".\n" + "\tAdicionais: \n");
     for (int i = 0; i < this.qtAdicionais; i++) {
-      desc.append(", com " + this.adicionais[i]);
+      desc.append("\t\tAdicional: " + this.adicionais[i] + "\n");
     }
-    desc.append("- Preço: R$ " + this.precoFinal() + "\n");
-    aux = desc.toString();
-    return aux;
+    desc.append("\tPreço: R$ " + this.precoFinal() + "\n\n");
+    return desc.toString();
   }
 
   /**
@@ -118,16 +116,16 @@ public abstract class Comida {
    * Adiciona um ingrediente até o limite
    * 
    * @param qual Descrição do ingrediente
-   * @return Booleano indicando se houve a adição do ingrediente
+   * @throws Exception
    */
-  public boolean addIngrediente(String qual) {
+  public void addIngrediente(String qual) throws Exception {
     int limite = maxAdicionais();
     if (this.qtAdicionais < limite) {
       this.adicionais[this.qtAdicionais] = qual;
       this.qtAdicionais++;
-      return true;
-    } else
-      return false;
+    } else {
+      throw new Exception("Limite de adicionais por pedido atingido!");
+    }
   }
 
   /**

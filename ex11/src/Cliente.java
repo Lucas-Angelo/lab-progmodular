@@ -31,7 +31,7 @@ import java.io.Serializable;
  * 
  * @author João Caram
  */
-public class Cliente implements Serializable {
+public class Cliente implements Serializable, Comparable<Object> {
 
     /** Nome do cliente (livre) */
     public String nome;
@@ -79,8 +79,7 @@ public class Cliente implements Serializable {
      * @param p O pedido já pronto
      * @return V/F se foi possível adicionar
      */
-    public boolean addPedido(Object o) {
-        boolean resposta = true;
+    public void addPedido(Object o) {
 
         try {
             Pedido p = (Pedido) o;
@@ -93,13 +92,9 @@ public class Cliente implements Serializable {
             }
         } catch (ClassCastException e) {
             System.err.println("Erro: deve ser adicionado pedidos para a lista de pedidos do cliente!");
-            resposta = false;
         } catch (NullPointerException e) {
             System.err.println(e.getMessage());
-            resposta = false;
         }
-
-        return resposta;
     }
 
     /**
@@ -143,6 +138,25 @@ public class Cliente implements Serializable {
         sb.append("CPF: " + this.CPF + "\n");
         sb.append("Total de pedidos: " + this.qtPedidos + "\n");
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        try {
+            Cliente clt = (Cliente) obj;
+            return (this.CPF.equals(clt.CPF));
+        } catch (ClassCastException ex) {
+            System.err.println("Cast inválido");
+            return false;
+        }
+    }
+
+    @Override
+    public int compareTo(Object obj) {
+        Cliente clt = (Cliente) obj;
+        int resp = Integer.parseInt(this.CPF) == Integer.parseInt(clt.getCPF()) ? 0
+                : (Integer.parseInt(this.CPF) > Integer.parseInt(clt.getCPF()) ? 1 : -1);
+        return resp;
     }
 
 }

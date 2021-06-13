@@ -38,10 +38,10 @@ public class Sanduiche extends Comida {
      */
     public Sanduiche(boolean dobro) {
         super(PRECO_SANDUICHE, MAX_ADICIONAIS); // construtor da classe mãe
-        this.setDescricao("Sanduíche ");
+        this.setDescricao("Sanduíche");
         this.dobroDeCarne = dobro;
         if (this.dobroDeCarne)
-            this.descricao += "com duas carnes ";
+            this.descricao += " com duas carnes";
     }
 
     /**
