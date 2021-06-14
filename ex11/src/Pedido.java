@@ -31,6 +31,8 @@ public class Pedido implements Serializable {
     private static final int MAXCOMIDAS;
     /** Atributo de classe para gerar novos IDs */
     private static int ultPedido;
+    /** Salva o valor vendido pelo restaurante */
+    private static double valorTotalVendido;
 
     /** ID do pedido. Sequencial */
     private int idPedido;
@@ -48,6 +50,11 @@ public class Pedido implements Serializable {
     static {
         MAXCOMIDAS = 10;
         ultPedido = 0;
+        valorTotalVendido = 0;
+    }
+
+    public static String valorTotalVendido() {
+        return "R$ " + String.format("%.2f", valorTotalVendido);
     }
 
     /** Construtor, cria pedido vazio */
@@ -66,6 +73,14 @@ public class Pedido implements Serializable {
         return this.quantComidas;
     }
 
+    public static void setIdAtual(int qtd) {
+        Pedido.ultPedido = qtd;
+    }
+
+    public static void setValorTotalVendido(double valor) {
+        Pedido.valorTotalVendido = valor;
+    }
+
     /**
      * Pedido aberto ou fechado
      * 
@@ -80,21 +95,18 @@ public class Pedido implements Serializable {
      * 
      * @param c A comida a ser adicionada
      * @return V/F para o sucesso da operação de adicionar
+     * @throws Exception
      */
-    public void addComida(Comida c) {
+    public void addComida(Comida c) throws Exception {
 
-        try{
-            if (!this.fechado) {
-                if (this.quantComidas < MAXCOMIDAS) {
-                    comidas[quantComidas] = c;
-                    this.quantComidas++;
-                }
+        if (!this.fechado) {
+            if (this.quantComidas < MAXCOMIDAS) {
+                comidas[quantComidas] = c;
+                this.quantComidas++;
             }
-            else{
-                throw new Exception("Pedido fechado.");
-            }
-        }catch (Exception e){
-            System.err.print(e.getMessage());
+        }
+        else{
+            throw new Exception("Pedido fechado.");
         }
 
     }
@@ -141,11 +153,11 @@ public class Pedido implements Serializable {
         if (this.quantComidas == 0)
             throw new Exception("Erro: não é possível fechar um pedido sem comidas.");
         
-        if (this.fechado) {
+        if (this.fechado)
             throw new Exception("Erro: não é possível fechar um pedido já fechado.");
-        }
 
         this.dataPedido = new Data(5, 4, 2021);
+        valorTotalVendido += this.valorTotal();
         this.sumario();
         this.fechado = true;
         ultPedido++;

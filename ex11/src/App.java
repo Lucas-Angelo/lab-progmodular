@@ -55,6 +55,18 @@ public class App {
             }
             leitura.fecharArquivo();
         }
+        int idAtual = 0;
+        double totalVendido=0;
+        List<Pedido> pedidos;
+        for (Cliente cliente : listaClientes) {
+            pedidos = cliente.getPedidos();
+            idAtual += pedidos.size();
+            for (Pedido pedido : pedidos) {
+                totalVendido += pedido.valorTotal();
+            }
+        }
+        Pedido.setIdAtual(idAtual);
+        Pedido.setValorTotalVendido(totalVendido);
 
         return listaClientes;
     }
@@ -107,18 +119,24 @@ public class App {
     // #region Métodos de controle
 
     static Optional<Cliente> buscarCliente(Scanner teclado, List<Cliente> listaClientes) {
-        Optional<Cliente> cliente = Optional.empty();
+        Optional<Cliente> c = Optional.empty();
+        while (c.isEmpty()) {
+            System.out.print("Digite o CPF do Cliente (Ou digite 0 para sair): ");
+            String cpf = teclado.nextLine().replaceAll("[^0-9]", "");
+            if (cpf.equals("0"))
+                break;
+            
+            c =  Optional.ofNullable(
+                listaClientes.stream()
+                    .filter(cliente -> cpf.equals(cliente.getCPF()))
+                    .findFirst()
+                    .orElse(null)
+            );
 
-        System.out.print("Digite o CPF do cliente: ");
-        String cpf = teclado.nextLine().replaceAll("[^0-9]", "");
-
-        cliente = listaClientes.stream().filter(clienteStream -> cpf.equals(clienteStream.getCPF())).findFirst();
-
-        if(cliente.isEmpty()) {
-            System.err.println("Cliente não cadastrado.");
+            if (c.isEmpty())
+                System.out.println("Cliente não cadastrado.");
         }
-
-        return cliente;
+        return c;
     }
 
     /**
@@ -141,6 +159,7 @@ public class App {
      * 
      * @param teclado Scanner de leitura
      * @return Uma comida ou nulo
+     * @throws Exception
      */
     static Optional<Comida> criarComida(Scanner teclado) throws Exception {
         int tipo = 0;
@@ -204,25 +223,32 @@ public class App {
     }
 
     static void imprimirPedido(Optional<Pedido> pedido) {
-        if (!pedido.isEmpty()) {
-            System.out.println(pedido.get());
-        } else
-            System.out.print("Pedido ainda não foi aberto. ");
+        pedido.ifPresentOrElse(
+            (pedidoLambda)->{
+                System.out.println(pedido.get());
+            },
+            ()->{
+                System.out.print("Pedido ainda não foi aberto.\n");
+            }
+        );
     }
 
     static Optional<Pedido> fecharPedido(Optional<Pedido> pedido, Optional<Cliente> cliente) {
-        if (!pedido.isEmpty()) {
-            try {
-                pedido.get().fecharPedido();
-                double aPagar = pedido.get().valorTotal() * (1.0 - cliente.get().desconto());
-                cliente.get().addPedido(pedido.get());
-                System.out.println(pedido.get());
-                System.out.println("Cliente " + cliente.get().nome + " paga R$ " + aPagar);
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
+        pedido.ifPresentOrElse(
+            (pedidoLambda)->{
+                try {
+                    pedidoLambda.fecharPedido();
+                    double aPagar = pedidoLambda.valorTotal() * (1.0 - cliente.get().desconto());
+                    cliente.get().addPedido(pedidoLambda);
+                    System.out.println(pedidoLambda);
+                    System.out.println("Cliente " + cliente.get().nome + " paga R$ " + aPagar);
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }, ()->{
+                System.out.print("Pedido ainda não foi aberto.\n");
             }
-        } else
-            System.out.print("Pedido ainda não foi aberto.\n");
+        );
         return pedido;
     }
     // #endregion
@@ -250,28 +276,32 @@ public class App {
             opcao = menu(teclado);
             limparTela();
 
-            // Este switch pode ser melhorado BASTANTE com a extração de lógica dos cases
-            // e modularização em métodos específicos na região de métodos de controle.
             switch (opcao) {
                 case 1:
-                    cliente = buscarCliente(teclado, listaClientes);
-                    if(!cliente.isEmpty()) {
-                        pedido = criarNovo(pedido);
-                    } else {
-                        System.err.println("Não foi possível criar o pedido.");
-                    }
+                    if(pedido.isEmpty() || pedido.get().fechado()) {
+                        cliente = buscarCliente(teclado, listaClientes);
+                        if(!cliente.isEmpty())
+                            pedido = criarNovo(pedido);
+                        else
+                            System.err.println("Não foi possível criar o pedido.");
+                    } else
+                        System.err.println("Não é possível criar um pedido enquanto outro está aberto.");
                     pausa(teclado);
                     break;
                 case 2:
-                    Optional<Comida> aux = criarComida(teclado);
-                    if (!pedido.isEmpty()) {
-                        try {
-                            pedido.get().addComida(aux.get());
-                        } catch (Exception e) {
-                            System.err.println(e.getMessage());
+                    pedido.ifPresentOrElse(
+                        (pedidoLambda)->{
+                            try {
+                                Optional<Comida> aux = criarComida(teclado);
+                                pedidoLambda.addComida(aux.get());
+                            } catch (Exception e) {
+                                System.err.println(e.getMessage());
+                            }
+                        }, 
+                        ()->{
+                            System.out.print("Pedido ainda não foi aberto.\n");
                         }
-                    } else
-                        System.out.print("Pedido ainda não foi aberto. ");
+                    );
                     pausa(teclado);
                     break;
                 case 3:
@@ -283,6 +313,8 @@ public class App {
                     pausa(teclado);
                     break;
                 case 5:
+                    System.out.println(Pedido.valorTotalVendido());
+                    pausa(teclado);
                     break;
                 case 0:
                     salvarClientesNoArquivo(listaClientes, arquivo);

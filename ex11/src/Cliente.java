@@ -130,6 +130,10 @@ public class Cliente implements Serializable, Comparable<String> {
         return CPF;
     }
 
+    public List<Pedido> getPedidos() {
+        return this.pedidos;
+    }
+
     /**
      * Descrição do cliente: nome, CPF, total de pedidos
      */
