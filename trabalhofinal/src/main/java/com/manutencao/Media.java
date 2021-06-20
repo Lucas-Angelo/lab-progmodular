@@ -1,16 +1,16 @@
-package com;
+package com.manutencao;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Longa implements IManutencao, Serializable {
+public class Media implements IManutencao, Serializable {
     protected int ultimaManun;
-    private static final long serialVersionUID = 101L;
+    private static final long serialVersionUID = 102L;
 
-    public Longa (){
+    public Media (){
         init(0);
     }
-    public Longa(int kmRodadoAtual){
+    public Media(int kmRodadoAtual){
         init (kmRodadoAtual);
     }
 
@@ -29,11 +29,11 @@ public class Longa implements IManutencao, Serializable {
         ultimaManun = kmManutencao;
         return (ultimaManun == kmManutencao);
 
-    }
 
+    }
     @Override
     public String toString() {
-        return "Longa{" +
+        return "Media{" +
                 "ultimaManun= " + ultimaManun +
                 '}';
     }

@@ -1,4 +1,4 @@
-package com;
+package com.manutencao;
 
 import java.io.Serializable;
 import java.util.Objects;
