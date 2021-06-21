@@ -19,7 +19,7 @@ public class Tanque {
         this.quantidade = quantidade;
         this.combustivel = combustivel;
     }
-    
+
     public Tanque(double capacidade, Combustivel combustivel) {
         init(capacidade, 0, combustivel);
     }
@@ -33,7 +33,7 @@ public class Tanque {
                     kmRodados, kmRestantes));
         }
 
-        setQuantidade( (kmRestantes / combustivel.consumo()) - (kmRodados / combustivel.consumo()));
+        setQuantidade((kmRestantes / combustivel.consumo()) - (kmRodados / combustivel.consumo()));
     }
 
     private double calcularKmRestantes() {
@@ -67,6 +67,7 @@ public class Tanque {
     public double getCapacidade() {
         return this.capacidade;
     }
+
     public void setCapacidade(double capacidade) throws Exception {
         if (capacidade < this.quantidade)
             throw new TrocaCapacidadeException(String.format(
@@ -79,6 +80,7 @@ public class Tanque {
     public double getQuantidade() {
         return this.quantidade;
     }
+
     private void setQuantidade(double quantidade) {
         this.quantidade = quantidade;
     }
@@ -86,6 +88,7 @@ public class Tanque {
     public Combustivel getCombustivel() {
         return this.combustivel;
     }
+
     public void setCombustivel(Combustivel combustivel) throws Exception {
 
         if (this.quantidade != 0)
@@ -96,25 +99,30 @@ public class Tanque {
         this.combustivel = combustivel;
     }
 
-    // @Override
-    // public boolean equals(Object o) {
-    // if (o == this)
-    // return true;
-    // if (!(o instanceof Tanque)) {
-    // return false;
-    // }
-    // Tanque tanque = (Tanque) o;
-    // return capacidade == tanque.capacidade && quantidade == tanque.quantidade &&
-    // Objects.equals(combustivel, tanque.combustivel);
-    // }
+    @Override
+    public boolean equals(Object obj) {
+        boolean igual = false;
+        try {
+            Tanque tanque = (Tanque) obj;
+            if (this == tanque)
+                igual = true;
+        } catch (ClassCastException e) {
+            System.err.println("Cast/Comparação inválida!");
+            igual = false;
+        }
+        return igual;
+    }
 
-    // @Override
-    // public String toString() {
-    // return "{" +
-    // " capacidade='" + getCapacidade() + "'" +
-    // ", quantidade='" + getQuantidade() + "'" +
-    // ", combustivel='" + getCombustivel() + "'" +
-    // "}";
-    // }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Tanque de capacidade de ");
+        sb.append(this.capacidade + " litros. ");
+        sb.append("Atualmente possui ");
+        sb.append(this.quantidade + " litros de " + this.combustivel.toString().toLowerCase() + ".");
+
+        return sb.toString();
+    }
 
 }

@@ -3,7 +3,7 @@ package com.abastecimento;
 public enum Combustivel {
 
     ALCOOL(7d, 4.49d), DIESEL(4d, 4.34d), GASOLINA(10d, 5.79d);
-    
+
     private double gastoMedio;
     private double precoMedio;
 
@@ -23,5 +23,5 @@ public enum Combustivel {
     public double precoMedio() {
         return this.precoMedio;
     }
-    
+
 }

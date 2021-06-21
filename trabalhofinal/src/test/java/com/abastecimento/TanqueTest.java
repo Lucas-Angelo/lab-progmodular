@@ -3,6 +3,7 @@ package com.abastecimento;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -41,26 +42,20 @@ public class TanqueTest {
     @Test
     public void excecaoLimiteLitrosException() throws Exception {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
-        
-        Exception thrown = assertThrows(
-            LimiteLitrosException.class,
-            () -> this.tanque.reabastecer(11),
-            "Esperado dar erro ao tentar reabastecer mais litros do que o tanque suporta."
-        );
- 
+
+        Exception thrown = assertThrows(LimiteLitrosException.class, () -> this.tanque.reabastecer(11),
+                "Esperado dar erro ao tentar reabastecer mais litros do que o tanque suporta.");
+
         assertTrue(thrown.getMessage().contains("Não foi possível reabastecer"));
     }
 
     @Test
     public void excecaoNumeroNegativoException() throws Exception {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
-        
-        Exception thrown = assertThrows(
-            NumeroNegativoException.class,
-            () -> this.tanque.reabastecer(-1),
-            "Esperado dar erro ao tentar reabastecer litros negativos."
-        );
- 
+
+        Exception thrown = assertThrows(NumeroNegativoException.class, () -> this.tanque.reabastecer(-1),
+                "Esperado dar erro ao tentar reabastecer litros negativos.");
+
         assertTrue(thrown.getMessage().contains("Não é possível abastecer quantidades negativas de litros."));
     }
 
@@ -68,13 +63,10 @@ public class TanqueTest {
     public void exececaoLimiteKmException() throws Exception {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
         this.tanque.reabastecer(10);
-        
-        Exception thrown = assertThrows(
-            LimiteKmException.class,
-            () -> this.tanque.consumir(71),
-            "Esperado dar erro ao tentar andar mais quilometros do que o combustível suporta."
-        );
- 
+
+        Exception thrown = assertThrows(LimiteKmException.class, () -> this.tanque.consumir(71),
+                "Esperado dar erro ao tentar andar mais quilometros do que o combustível suporta.");
+
         assertTrue(thrown.getMessage().contains("o tanque deste veículo suporta apenas mais"));
     }
 
@@ -82,13 +74,10 @@ public class TanqueTest {
     public void exececaoTrocaCapacidadeException() throws Exception {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
         this.tanque.reabastecer(10);
-        
-        Exception thrown = assertThrows(
-            TrocaCapacidadeException.class,
-            () -> this.tanque.setCapacidade(5),
-            "Esperado dar erro ao tentar trocar a capacidade para algo menor do que já tem em litros."
-        );
- 
+
+        Exception thrown = assertThrows(TrocaCapacidadeException.class, () -> this.tanque.setCapacidade(5),
+                "Esperado dar erro ao tentar trocar a capacidade para algo menor do que já tem em litros.");
+
         assertTrue(thrown.getMessage().contains("a quantidade atual de litros no tanque é"));
     }
 
@@ -96,14 +85,34 @@ public class TanqueTest {
     public void exececaoTrocaCombustivel() throws Exception {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
         this.tanque.reabastecer(1);
-        
-        Exception thrown = assertThrows(
-            TrocaCombustivel.class,
-            () -> this.tanque.setCombustivel(Combustivel.GASOLINA),
-            "Esperado dar erro ao tentar trocar o tipo de combustível com litros no tanque."
-        );
- 
-        assertTrue(thrown.getMessage().contains("Para trocar o tipo de combustível é necessário esvaziar o tanque do veículo primeiramente."));
+
+        Exception thrown = assertThrows(TrocaCombustivel.class, () -> this.tanque.setCombustivel(Combustivel.GASOLINA),
+                "Esperado dar erro ao tentar trocar o tipo de combustível com litros no tanque.");
+
+        assertTrue(thrown.getMessage().contains(
+                "Para trocar o tipo de combustível é necessário esvaziar o tanque do veículo primeiramente."));
     }
-    
+
+    @Test
+    public void iguais() throws Exception {
+        this.tanque = new Tanque(10, Combustivel.ALCOOL);
+        Object o = this.tanque;
+        assertTrue(this.tanque.equals(o));
+    }
+
+    @Test
+    public void diferentes() throws Exception {
+        this.tanque = new Tanque(10, Combustivel.ALCOOL);
+        Object o = new Object();
+        assertFalse(this.tanque.equals(o));
+    }
+
+    @Test
+    public void impressao() throws Exception {
+        this.tanque = new Tanque(10, Combustivel.ALCOOL);
+        this.tanque.reabastecer(2);
+        assertEquals("Tanque de capacidade de 10.0 litros. Atualmente possui 2.0 litros de alcool.",
+                this.tanque.toString());
+    }
+
 }
