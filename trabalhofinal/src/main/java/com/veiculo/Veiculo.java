@@ -19,10 +19,21 @@ public abstract class Veiculo implements Serializable, Comparable<Object> {
     protected int kmRodados;
     protected Queue<Manutencao> manutencoes;
 
+    /** Construtor de Veiculo que irá inicializar os valores por meio da função init().
+     * @param p String - A placa do veículo.
+     * @param t Tanque - O tanque incluido no veiculo.
+     * @param plano IManutencao - O plano de manutenção do veículo
+     * @return Veiculo - O objeto de veiculo instânciado.
+     */
     public Veiculo(String p, Tanque t, IManutencao plano) {
         init(p,t,plano);
     }
 
+    /** Método init para inicializar os atributos comuns dos contrutores dos tipos de Veiculo quando instânciar um novo veiculo.
+     * @param p String - A placa do veículo.
+     * @param t Tanque - O tanque incluido no veiculo.
+     * @param plano IManutencao - O plano de manutenção do veículo
+     */
     private void init(String p, Tanque t, IManutencao plano){
         this.placa = p;
         this.tanque = t;
@@ -33,14 +44,27 @@ public abstract class Veiculo implements Serializable, Comparable<Object> {
         this.manutencoes.add(m);
     }
 
+    /** Método para retornar a quilometragem
+     * @return int - quilometragem total to veículo
+     */
     public int getKmRodados() {
         return kmRodados;
     }
 
+    /** Método para retornar o gasto do veículo
+     * @return double - gasto total com o veiculo
+     */
     public double getDespesaAtual() {
         return despesaAtual;
     }
 
+    /**
+     * Adicionar uma nova rota ao veículo
+     *
+     * @param data - Quando ocorreu a rota
+     * @param kmTotal - Quilometragem da rota
+     * @throws LimiteRotaException Caso exceda o limite diario do veículo
+     */
     public void addRota(Date data, int kmTotal) throws LimiteRotaException {
 
         Combustivel c = this.tanque.getCombustivel();
@@ -68,6 +92,9 @@ public abstract class Veiculo implements Serializable, Comparable<Object> {
         }
     }
 
+    /** Reabastece o tanque do veículo
+     * @return double - Valor do reabastecimento
+     */
     public double reabastecer(){
         int quantidade = (int) this.tanque.getCapacidade() - (int) this.tanque.getQuantidade();
         try{
@@ -79,27 +106,26 @@ public abstract class Veiculo implements Serializable, Comparable<Object> {
         return  0.0;
     }
 
+
+    /**Realiza a manutencao de um veículo
+     *
+     * @return double - Valor da manutencao
+     */
     public double fazerManutencao(){
 
         IManutencao tipo = this.manutencoes.peek().getPlano();
         Manutencao m = new Manutencao(tipo);
-        m.registrarManutencao(this.kmRodados);
-        this.manutencoes.add(m);
-
-        double price = 0.0;
-        if(tipo instanceof Curta)
-            price = 200.00;
-        else if(tipo instanceof Media)
-            price = 400.00;
-        else if(tipo instanceof Longa)
-            price = 800.00;
+        double price = m.registrarManutencao(this.kmRodados);
 
         this.despesaAtual += price;
-
+        this.manutencoes.add(m);
         return price;
 
     }
 
+    /** Verifica se um objeto é igual, menor ou maior do que este veiculo.
+     * @param obj Objeto - O objeto a ser verificado.
+     */
     @Override
     public int compareTo(Object obj) {
         int igual = -1;
@@ -116,6 +142,9 @@ public abstract class Veiculo implements Serializable, Comparable<Object> {
         return igual;
     }
 
+    /** Verifica se um objeto é igual a este veiculo.
+     * @param obj Objeto - O objeto a ser verificado.
+     */
     @Override
     public boolean equals(Object obj) {
         boolean igual = false;
@@ -130,7 +159,7 @@ public abstract class Veiculo implements Serializable, Comparable<Object> {
         return igual;
     }
 
-    /** Imprime os dados desta manutencao.
+    /** Imprime os dados deste veículo.
      */
     @Override
     public String toString() {

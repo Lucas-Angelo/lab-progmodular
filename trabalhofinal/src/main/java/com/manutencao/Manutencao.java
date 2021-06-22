@@ -12,26 +12,56 @@ public class Manutencao implements Serializable, Comparable<Object> {
     private int kmRodados;
     private IManutencao plano;
 
+    /** Construtor de Manutencao que irá inicializar os valores por meio da função init().
+     * @param p - Plano da manutencao
+     */
     public Manutencao(IManutencao p){
         init(p);
     }
 
+    /**Método init para inicializar os atributos comuns dos contrutores dos tipos de Manutencao quando instânciar um nova manutencao.
+     *
+     * @param plano
+     */
     private void init(IManutencao plano){
         this.plano = plano;
     }
 
+    /** Retorna o plano da manutencao
+     * @return IManutencao
+     */
     public IManutencao getPlano() {
         return plano;
     }
 
+    /** Quando e a proxima manutencao
+     *
+     * @return int - Quando e a proxima manutencao
+     */
     public int proximaManutencao(){
         return this.plano.proximaManutencao(this.kmRodados);
     };
 
-    public void registrarManutencao(int kmRodados) {
+    /**
+     * @param kmRodados Quantidade de kms rodado pelo veiculo
+     * @return double - Valor da manutencao
+     */
+    public double registrarManutencao(int kmRodados) {
         this.kmRodados = kmRodados;
+        double price = 0.0;
+        if(plano instanceof Curta)
+            price = 200.00;
+        else if(plano instanceof Media)
+            price = 400.00;
+        else if(plano instanceof Longa)
+            price = 800.00;
+
+        return price;
     }
 
+    /** Verifica se um objeto é igual, menor ou maior do que esta manutencao.
+     * @param obj Objeto - O objeto a ser verificado.
+     */
     @Override
     public int compareTo(Object obj) {
         int igual = -1;
@@ -48,6 +78,9 @@ public class Manutencao implements Serializable, Comparable<Object> {
         return igual;
     }
 
+    /** Verifica se um objeto é igual a esta manutencao.
+     * @param obj Objeto - O objeto a ser verificado.
+     */
     @Override
     public boolean equals(Object obj) {
         boolean igual = false;
