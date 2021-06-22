@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import com.excecoes.abastecimento.LimiteKmException;
-import com.excecoes.abastecimento.NumeroNegativoException;
 import com.excecoes.abastecimento.TrocaCapacidadeException;
 import com.excecoes.abastecimento.TrocaCombustivel;
 
@@ -73,13 +72,12 @@ public class Tanque implements Serializable, Comparable<Object> {
     * @param litros int - Quantidade de litros à ser reabastecido.
     * @author Lucas Ângelo.
     * @return Double - O valor a ser pago pela quantidade de litros adicionada para aquele tipo de combustível.
-    * @throws NumeroNegativoException Caso tente adicionar uma quantidade negativa de litros.
     */
     public double reabastecer(int litros) throws Exception {
         double valorAPagar = 0;
 
         if ((litros) < 0) {
-            throw new NumeroNegativoException("Não é possível abastecer quantidades negativas de litros.");
+            litros = 0;
         }
 
         if ((this.quantidade + litros) > this.capacidade) {

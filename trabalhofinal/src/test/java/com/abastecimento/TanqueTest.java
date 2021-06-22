@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.excecoes.abastecimento.LimiteKmException;
-import com.excecoes.abastecimento.NumeroNegativoException;
 import com.excecoes.abastecimento.TrocaCapacidadeException;
 import com.excecoes.abastecimento.TrocaCombustivel;
 
@@ -54,11 +53,7 @@ public class TanqueTest {
     @DisplayName("Verificar se exceção é gerada ao reabastecer quantidade negativa de litros.")
     public void excecaoNumeroNegativoException() throws Exception {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
-
-        Exception thrown = assertThrows(NumeroNegativoException.class, () -> this.tanque.reabastecer(-1),
-                "Esperado dar erro ao tentar reabastecer litros negativos.");
-
-        assertTrue(thrown.getMessage().contains("Não é possível abastecer quantidades negativas de litros."));
+        assertEquals(0, this.tanque.reabastecer(-1), .0);
     }
 
     @Test
