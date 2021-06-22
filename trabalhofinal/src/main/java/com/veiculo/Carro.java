@@ -12,8 +12,8 @@ public class Carro extends Veiculo{
         TANQUE_CAPACIDADE = 50;
     }
 
-    Carro(String placa){
-        super(placa, new Tanque(TANQUE_CAPACIDADE, 0, Combustivel.GASOLINA));
+    public Carro(String placa){
+        super(placa, new Tanque(TANQUE_CAPACIDADE, Combustivel.GASOLINA));
     }
 
     @Override

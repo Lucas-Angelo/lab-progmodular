@@ -49,7 +49,12 @@ public abstract class Veiculo {
         *
         */
         this.kmRodados += kmTotal;
-        this.tanque.consumir(kmTotal);
+        try {
+            this.tanque.consumir(kmTotal);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            System.out.println(e.getMessage());
+        }
     }
 
     public double reabastecer(){
