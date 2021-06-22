@@ -15,6 +15,10 @@ public class Manutencao {
         this.plano = plano;
     }
 
+    public IManutencao getPlano() {
+        return plano;
+    }
+
     public int proximaManutencao(){
         return this.plano.proximaManutencao(this.kmRodados);
     };

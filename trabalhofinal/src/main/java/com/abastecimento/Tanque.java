@@ -47,7 +47,7 @@ public class Tanque implements Serializable, Comparable<Object> {
     * @author Lucas Ângelo.
     * @throws LimiteKmException Caso a quantia de combustível no tanque não consiga percorrer a quantidade de quilômetros informados.
     */
-    public void consumir(int kmRodados) throws Exception {
+    public void consumir(int kmRodados) throws LimiteKmException {
         double kmRestantes = calcularKmRestantes();
 
         if ((kmRestantes - kmRodados) < 0) {

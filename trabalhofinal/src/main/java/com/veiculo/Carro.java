@@ -13,14 +13,6 @@ public class Carro extends Veiculo{
     }
 
     Carro(String placa){
-        super(placa, new Tanque(TANQUE_CAPACIDADE, 0, Combustivel.GASOLINA));
-    }
-
-    @Override
-    public double fazerManutencao() {
-        Manutencao m = new Manutencao(new Curta());
-        m.registrarManutencao(this.kmRodados);
-        this.manutencoes.add(m);
-        return m.proximaManutencao(); // O QUE ERA PRA RETORNAR AQUI ?
+        super(placa, new Tanque(TANQUE_CAPACIDADE, Combustivel.GASOLINA), new Curta());
     }
 }
