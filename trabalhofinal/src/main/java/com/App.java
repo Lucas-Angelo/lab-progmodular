@@ -1,22 +1,11 @@
 package com;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
-import com.veiculo.Caminhao;
-import com.veiculo.Carro;
-import com.veiculo.Furgao;
-import com.veiculo.Rota;
-import com.veiculo.Van;
-import com.veiculo.Veiculo;
-import com.excecoes.veiculo.LimiteRotaException;
-import com.fabrica.Factory;
-import com.fabrica.VeiculoFactory;
+import com.veiculo.*;
+import com.excecoes.*;
+import com.fabrica.*;
 import com.serializacao.*;
 
 /**
