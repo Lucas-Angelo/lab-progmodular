@@ -75,15 +75,9 @@ public abstract class Veiculo implements Serializable, Comparable<Object> {
         else if(this.tanque.getQuantidade() < necessario) // Verificar se possui combustivel necessário para fazer a rota, caso contrario reabastecer
             this.reabastecer();
 
-        /*Rota r = new Rota(data, kmTotal);
-
-        * Rota r = new Rota();
-        * r.setData(data);
-        * r.setKmTotal(kmTotal);
-        *
-        * rotas.add(r);
-        *
-        */
+        Rota r = new Rota(data, kmTotal);
+        rotas.add(r);
+        
         this.kmRodados += kmTotal;
         try {
             this.tanque.consumir(kmTotal);
@@ -92,7 +86,7 @@ public abstract class Veiculo implements Serializable, Comparable<Object> {
         }
     }
 
-    /** Reabastece o tanque do veículo
+    /*Reabastece o tanque do veículo
      * @return double - Valor do reabastecimento
      */
     public double reabastecer(){

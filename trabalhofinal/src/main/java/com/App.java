@@ -91,25 +91,11 @@ public class App
         Veiculo veiculoFicticioParaBusca = new Carro(placaBuscada);
         v =  Optional.ofNullable(
             listaVeiculos.stream()
-                .filter(veiculo -> veiculoFicticioParaBusca.getPlaca().equals(veiculo.getPlaca()))
+                .filter(veiculo -> veiculo.equals(veiculoFicticioParaBusca))
                 .findFirst()
                 .orElse(null)
         );
         return v;
-    }
-
-    static Optional<Rota> criarNovaRota(Scanner teclado, Optional<Rota> rota) {
-
-
-
-        rota = Optional.of(new Rota());
-        
-        if(rota.isPresent())
-            System.out.println("Nova rota criada.");
-        else
-            System.out.println("Não foi possível criar nova a rota.");
- 
-        return rota;
     }
 
     static void menuCarros() {
@@ -117,7 +103,7 @@ public class App
         System.out.println("1 - Carro");
         System.out.println("2 - Furgão");
         System.out.println("3 - Van");
-        System.out.println("3 - Caminhão");
+        System.out.println("4 - Caminhão");
     }
 
     static String getPlacaVeiculo(Scanner teclado, String placa) {
@@ -162,9 +148,9 @@ public class App
 
         if (listaVeiculos.isEmpty()) {
             listaVeiculos.add(new Carro("LVI-7368"));
-            // listaVeiculos.add(new Furgao("CSE-6837"));
-            // listaVeiculos.add(new Van("MNX-2556"));
-            // listaVeiculos.add(new Caminhao("MUW-7826"));
+            listaVeiculos.add(new Furgao("CSE-6837"));
+            listaVeiculos.add(new Van("MNX-2556"));
+            listaVeiculos.add(new Caminhao("MUW-7826"));
         }
         salvarVeiculosNoArquivo(listaVeiculos, arquivo);
         listaVeiculos = carregarVeiculosDoArquivo(listaVeiculos, arquivo);
