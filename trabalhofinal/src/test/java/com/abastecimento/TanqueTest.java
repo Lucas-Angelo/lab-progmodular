@@ -1,15 +1,13 @@
 package com.abastecimento;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import com.excecoes.abastecimento.LimiteKmException;
-import com.excecoes.abastecimento.LimiteLitrosException;
 import com.excecoes.abastecimento.NumeroNegativoException;
 import com.excecoes.abastecimento.TrocaCapacidadeException;
 import com.excecoes.abastecimento.TrocaCombustivel;
@@ -19,12 +17,14 @@ public class TanqueTest {
     private Tanque tanque;
 
     @Test
+    @DisplayName("Verificar se ao criar o tanque, ele está vazio.")
     public void tanqueVazioTest() {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
         assertEquals(0, this.tanque.getQuantidade(), .0);
     }
 
     @Test
+    @DisplayName("Verificar o valor do combustível reabastecido.")
     public void valorReabastecido() throws Exception {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
         double valorReabastecido = this.tanque.reabastecer(10);
@@ -32,6 +32,7 @@ public class TanqueTest {
     }
 
     @Test
+    @DisplayName("Verificar consumo de combustível.")
     public void valorConsumido() throws Exception {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
         this.tanque.reabastecer(10);
@@ -40,16 +41,17 @@ public class TanqueTest {
     }
 
     @Test
-    public void excecaoLimiteLitrosException() throws Exception {
+    @DisplayName("Verificar preço e quantidade no reabastecimento com valores maiores que a capcidade.")
+    public void reabastecerQtdEValor() throws Exception {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
-
-        Exception thrown = assertThrows(LimiteLitrosException.class, () -> this.tanque.reabastecer(11),
-                "Esperado dar erro ao tentar reabastecer mais litros do que o tanque suporta.");
-
-        assertTrue(thrown.getMessage().contains("Não foi possível reabastecer"));
+        this.tanque.reabastecer(11);
+        
+        assertEquals(10, this.tanque.getQuantidade(), .0);
+        assertEquals(0, this.tanque.reabastecer(10), .0);
     }
 
     @Test
+    @DisplayName("Verificar se exceção é gerada ao reabastecer quantidade negativa de litros.")
     public void excecaoNumeroNegativoException() throws Exception {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
 
@@ -60,6 +62,7 @@ public class TanqueTest {
     }
 
     @Test
+    @DisplayName("Verificar se exceção é gerada ao tentar percorrer mais km do que os litros suportam.")
     public void exececaoLimiteKmException() throws Exception {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
         this.tanque.reabastecer(10);
@@ -71,6 +74,7 @@ public class TanqueTest {
     }
 
     @Test
+    @DisplayName("Verificar se exceção é gerada ao tentar diminuir capacidade do tanque com litros dentro.")
     public void exececaoTrocaCapacidadeException() throws Exception {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
         this.tanque.reabastecer(10);
@@ -82,6 +86,7 @@ public class TanqueTest {
     }
 
     @Test
+    @DisplayName("Verificar se exceção é gerada ao tentar trocar o tipo de combustível com litros dentro.")
     public void exececaoTrocaCombustivel() throws Exception {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
         this.tanque.reabastecer(1);
@@ -94,20 +99,23 @@ public class TanqueTest {
     }
 
     @Test
-    public void iguais() throws Exception {
+    @DisplayName("Verificar se o mesmo tanque é igual por equals.")
+    public void iguaisPorEquals() throws Exception {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
         Object o = this.tanque;
         assertTrue(this.tanque.equals(o));
     }
 
     @Test
-    public void diferentes() throws Exception {
+    @DisplayName("Verificar se o mesmo tanque é igual por compareTo.")
+    public void iguaisPorCompareTo() throws Exception {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
-        Object o = new Object();
-        assertFalse(this.tanque.equals(o));
+        Object o = this.tanque;
+        assertEquals(0, this.tanque.compareTo(o));
     }
 
     @Test
+    @DisplayName("Verificar impressão do toString() do tanque.")
     public void impressao() throws Exception {
         this.tanque = new Tanque(10, Combustivel.ALCOOL);
         this.tanque.reabastecer(2);
