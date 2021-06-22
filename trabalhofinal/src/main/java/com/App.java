@@ -135,22 +135,7 @@ public class App
 
         Factory<Veiculo> myFactory = new VeiculoFactory();
         Optional<Veiculo> novo = Optional.empty();
-        switch (tipo) {
-            case 1:
-                novo = Optional.of(myFactory.getProduct(tipo, placa));
-                break;
-            case 2:
-                novo = Optional.of(new Furgao(placa));
-                break;
-            case 3:
-                novo = Optional.of(new Van(placa));
-                break;
-            case 4:
-                novo = Optional.of(new Caminhao(placa));
-                break;
-            default:
-                throw new Exception("Veículo inválido");
-        }
+        novo = Optional.of(myFactory.getProduct(tipo, placa));
 
         return novo;
     }
@@ -199,6 +184,8 @@ public class App
                     if(veiculo.isEmpty()) {
                         veiculo = criarVeiculo(teclado, placa);
                         listaVeiculos.add(veiculo.get());
+                        teclado.nextLine();
+                        System.out.println("Veículo criado.");
                     }
                     else
                         System.err.println("Já existe veículo com essa placa.");
