@@ -48,14 +48,7 @@ public class Manutencao implements Serializable, Comparable<Object> {
      */
     public double registrarManutencao(int kmRodados) {
         this.kmRodados = kmRodados;
-        double price = 0.0;
-        if(plano instanceof Curta)
-            price = 200.00;
-        else if(plano instanceof Media)
-            price = 400.00;
-        else if(plano instanceof Longa)
-            price = 800.00;
-
+        double price = 200.0;
         return price;
     }
 
