@@ -1,10 +1,6 @@
-package com;
+package com.manutencao;
 
 import static org.junit.Assert.assertTrue;
-
-import com.manutencao.Curta;
-import com.manutencao.Longa;
-import com.manutencao.Media;
 
 import org.junit.Test;
 
