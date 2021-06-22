@@ -11,10 +11,21 @@ import org.junit.Test;
 /**
  * Unit test for simple App.
  */
+
+ /** 
+ *  Classe de testes das classes Curta,Media,Longa
+ * TESTE CONTRUTOR
+ * TESTE METODO PROX MANUT
+ * TESTE METODO EXECUTA MANUT
+ * RESPECTIVAMENTE
+ *  @author Marcos Felipe.
+ *  @version 1.0
+ */
 public class ManutTeste 
 {
  
     //--------------------------------------------------------------------------
+
 
     @Test
     public void testContructorCurta()
@@ -40,6 +51,8 @@ public class ManutTeste
         assertTrue( manutExecutada == true );
     }
     //-------------------------------------------------------------------------
+
+
 
     @Test
     public void testContructorMedia()
