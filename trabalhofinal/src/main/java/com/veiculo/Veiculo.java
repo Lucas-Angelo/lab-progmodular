@@ -19,7 +19,11 @@ public abstract class Veiculo implements Serializable, Comparable<Object> {
     protected int kmRodados;
     protected Queue<Manutencao> manutencoes;
 
-    Veiculo(String p, Tanque t, IManutencao plano) {
+    public Veiculo(String p, Tanque t, IManutencao plano) {
+        init(p,t,plano);
+    }
+
+    private void init(String p, Tanque t, IManutencao plano){
         this.placa = p;
         this.tanque = t;
         this.manutencoes = new LinkedList<Manutencao>();
@@ -101,7 +105,7 @@ public abstract class Veiculo implements Serializable, Comparable<Object> {
         int igual = -1;
         try {
             Veiculo v = (Veiculo) obj;
-            if (this.placa == v.placa)
+            if (this.placa.equals(v.placa))
                 igual = 0;
             else
                 igual = 1;
@@ -117,7 +121,7 @@ public abstract class Veiculo implements Serializable, Comparable<Object> {
         boolean igual = false;
         try {
             Veiculo v = (Veiculo) obj;
-            if (this == v)
+            if (this.placa.equals(v.placa))
                 igual = true;
         } catch (ClassCastException e) {
             System.err.println("Cast/Comparação inválida!");
@@ -126,4 +130,25 @@ public abstract class Veiculo implements Serializable, Comparable<Object> {
         return igual;
     }
 
+    /** Imprime os dados desta manutencao.
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Placa: ");
+        sb.append(this.placa);
+        sb.append(" Tanque: ");
+        sb.append(this.tanque.toString());
+        sb.append(" Despesa Atual: ");
+        sb.append(String.format("%.2f",this.despesaAtual));
+        sb.append(" Kms Rodados: ");
+        sb.append(this.kmRodados);
+        sb.append(" Rotas Realizadas: ");
+        sb.append(this.rotas.size());
+        sb.append(" Manutencoes Realizadas: ");
+        sb.append(this.manutencoes.size());
+
+        return sb.toString();
+    }
 }
