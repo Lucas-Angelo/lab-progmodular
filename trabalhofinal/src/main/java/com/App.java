@@ -69,8 +69,9 @@ public class App
         System.out.println("XULAMBS ENTREGAS");
         System.out.println("==========================");
         System.out.println("1 - Novo veículo");
-        System.out.println("2 - Adicionar rota para um veículo");
-        System.out.println("3 - Calcular despesa total de um veículo");
+        System.out.println("2 - Verificar quilometragem de um veiculo");
+        System.out.println("3 - Adicionar rota para um veículo");
+        System.out.println("4 - Calcular despesa total de um veículo");
         System.out.println("0 - Salvar e sair");
         System.out.print("Digite sua opção: ");
 
@@ -182,6 +183,20 @@ public class App
                     veiculo = buscarVeiculo(teclado, listaVeiculos, placa);
                     veiculo.ifPresentOrElse(
                         (veiculoLambda)-> {
+                            System.out.println("Quilometragem: " + veiculoLambda.getKmRodados());
+                            pausa(teclado);
+                        }, 
+                        ()->{
+                            System.out.println("Veículo não encontrado.");
+                            pausa(teclado);
+                        }
+                    );
+                    break;
+                case 3:
+                    placa = getPlacaVeiculo(teclado, placa);
+                    veiculo = buscarVeiculo(teclado, listaVeiculos, placa);
+                    veiculo.ifPresentOrElse(
+                        (veiculoLambda)-> {
                             System.out.print("Informe quilômetros a rota possui: ");
                             int kmTotal = teclado.nextInt();
                             try {
@@ -199,7 +214,7 @@ public class App
                         }
                     );
                     break;
-                case 3:
+                case 4:
                     placa = getPlacaVeiculo(teclado, placa);
                     veiculo = buscarVeiculo(teclado, listaVeiculos, placa);
                     veiculo.ifPresentOrElse(
