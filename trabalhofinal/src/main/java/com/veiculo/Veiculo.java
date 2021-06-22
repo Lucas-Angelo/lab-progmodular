@@ -12,7 +12,7 @@ public abstract class Veiculo implements Serializable, Comparable<Object> {
 
     private static final long serialVersionUID = 102L;
     
-    private String placa;
+    protected String placa;
     private Tanque tanque;
     protected Set<Rota> rotas;
     protected double despesaAtual;

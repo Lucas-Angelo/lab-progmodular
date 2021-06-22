@@ -167,7 +167,6 @@ public class Tanque implements Serializable, Comparable<Object> {
     /** Verifica se um objeto é igual a este tanque.
     * @param obj Objeto - O objeto a ser verificado.
     * @author Lucas Ângelo.
-    * @throws ClassCastException Caso não seja um objeto do tipo Tanque.
     */
     @Override
     public boolean equals(Object obj) {
@@ -186,7 +185,6 @@ public class Tanque implements Serializable, Comparable<Object> {
     /** Verifica se um objeto é igual, menor ou maior do que este tanque.
     * @param obj Objeto - O objeto a ser verificado.
     * @author Lucas Ângelo.
-    * @throws ClassCastException Caso não seja um objeto do tipo Tanque.
     */
     @Override
     public int compareTo(Object obj) {

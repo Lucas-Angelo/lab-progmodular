@@ -1,6 +1,7 @@
 package com;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,6 +15,8 @@ import com.veiculo.Rota;
 import com.veiculo.Van;
 import com.veiculo.Veiculo;
 import com.excecoes.veiculo.LimiteRotaException;
+import com.fabrica.Factory;
+import com.fabrica.VeiculoFactory;
 import com.serializacao.*;
 
 /**
@@ -25,10 +28,20 @@ public class App
     // #region Utilidades
     /**
      * "Limpa" a tela (códigos de terminal VT-100)
-     */
-    public static void limparTela() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+    * @throws IOException Se ocorrer algum erro ao tentar emtrar ou sair com o comando no cmd.
+    */
+    private static void limparTela() {
+        final String os = System.getProperty("os.name");
+        try{
+            if (os.contains("Windows"))
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            else
+                Runtime.getRuntime().exec("clear");
+        } catch (InterruptedException exception) {
+            System.out.println("Erro de interrupção ao tentar limpar terminal " + exception);
+        } catch (IOException exception) {
+            System.out.println("Erro de entrada/saída ao tentar limpar terminal " + exception);
+        }
     }
 
     public static List<Veiculo> carregarVeiculosDoArquivo(List<Veiculo> listaVeiculos, String arquivo) {
@@ -131,10 +144,11 @@ public class App
         System.out.print("Digite o tipo de veículo: ");
         tipo = teclado.nextInt();
 
+        Factory<Veiculo> myFactory = new VeiculoFactory();
         Optional<Veiculo> novo = Optional.empty();
         switch (tipo) {
             case 1:
-                novo = Optional.of(new Carro(placa));
+                novo = Optional.of(myFactory.getProduct(tipo, placa));
                 break;
             case 2:
                 novo = Optional.of(new Furgao(placa));
@@ -204,26 +218,24 @@ public class App
                 case 2:
                     placa = getPlacaVeiculo(teclado, placa);
                     veiculo = buscarVeiculo(teclado, listaVeiculos, placa);
-                    if(veiculo.isPresent()) {
-                        veiculo.ifPresentOrElse(
-                            (veiculoLambda)-> {
-                                System.out.println("Informe quilômetros a rota possui: ");
-                                int kmTotal = teclado.nextInt();
-                                try {
-                                    veiculoLambda.addRota(new Date(), kmTotal);
-                                } catch (LimiteRotaException e) {
-                                    System.err.println(e.getMessage());
-                                }
-                            }, 
-                            ()->{
-                                System.out.println("Veículo não encontrado.");
+                    veiculo.ifPresentOrElse(
+                        (veiculoLambda)-> {
+                            System.out.print("Informe quilômetros a rota possui: ");
+                            int kmTotal = teclado.nextInt();
+                            try {
+                                veiculoLambda.addRota(new Date(), kmTotal);
+                            } catch (LimiteRotaException e) {
+                                System.err.println(e.getMessage());
                             }
-                        );
-                    }
-                    else
-                        System.err.println("Não existe veículo com essa placa.");
-                    
-                    pausa(teclado);
+                            System.out.println("Rota adicionada.");
+                            teclado.nextLine();
+                            pausa(teclado);
+                        }, 
+                        ()->{
+                            System.out.println("Veículo não encontrado.");
+                            pausa(teclado);
+                        }
+                    );
                     break;
                 case 3:
                     placa = getPlacaVeiculo(teclado, placa);
