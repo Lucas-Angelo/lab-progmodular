@@ -101,13 +101,27 @@ public abstract class Veiculo implements Serializable, Comparable<Object> {
         int igual = -1;
         try {
             Veiculo v = (Veiculo) obj;
-            if (this == v)
+            if (this.placa == v.placa)
                 igual = 0;
             else
                 igual = 1;
         } catch (ClassCastException e) {
             System.err.println("Cast/Comparação inválida!");
             igual = -1;
+        }
+        return igual;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean igual = false;
+        try {
+            Veiculo v = (Veiculo) obj;
+            if (this == v)
+                igual = true;
+        } catch (ClassCastException e) {
+            System.err.println("Cast/Comparação inválida!");
+            igual = false;
         }
         return igual;
     }
