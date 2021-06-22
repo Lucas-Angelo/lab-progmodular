@@ -1,8 +1,9 @@
 package com.manutencao;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Manutencao {
+public class Manutencao implements Serializable {
     private Date data;
     private int kmRodados;
     private IManutencao plano;
@@ -13,6 +14,10 @@ public class Manutencao {
 
     private void init(IManutencao plano){
         this.plano = plano;
+    }
+
+    public IManutencao getPlano() {
+        return plano;
     }
 
     public int proximaManutencao(){

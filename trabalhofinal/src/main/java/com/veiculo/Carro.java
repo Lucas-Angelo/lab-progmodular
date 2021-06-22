@@ -1,11 +1,13 @@
 package com.veiculo;
 
+import java.io.Serializable;
+
 import com.abastecimento.Combustivel;
 import com.abastecimento.Tanque;
 import com.manutencao.Curta;
 import com.manutencao.Manutencao;
 
-public class Carro extends Veiculo{
+public class Carro extends Veiculo implements Serializable {
     protected static final double TANQUE_CAPACIDADE;
 
     static {
@@ -13,7 +15,7 @@ public class Carro extends Veiculo{
     }
 
     public Carro(String placa){
-        super(placa, new Tanque(TANQUE_CAPACIDADE, Combustivel.GASOLINA));
+        super(placa, new Tanque(TANQUE_CAPACIDADE, Combustivel.GASOLINA), new Curta());
     }
 
     @Override
@@ -23,4 +25,5 @@ public class Carro extends Veiculo{
         this.manutencoes.add(m);
         return m.proximaManutencao(); // O QUE ERA PRA RETORNAR AQUI ?
     }
+    
 }

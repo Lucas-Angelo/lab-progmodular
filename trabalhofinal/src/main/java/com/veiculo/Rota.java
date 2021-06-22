@@ -1,4 +1,6 @@
 package com.veiculo;
 
-public class Rota {
+import java.io.Serializable;
+
+public class Rota implements Serializable {
 }
