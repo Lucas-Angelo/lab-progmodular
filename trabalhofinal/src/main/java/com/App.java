@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import com.veiculo.*;
-import com.excecoes.*;
+import com.excecoes.veiculo.LimiteRotaException;
 import com.fabrica.*;
 import com.serializacao.*;
 
