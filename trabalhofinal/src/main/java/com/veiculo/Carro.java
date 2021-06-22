@@ -1,13 +1,11 @@
 package com.veiculo;
 
-import java.io.Serializable;
-
 import com.abastecimento.Combustivel;
 import com.abastecimento.Tanque;
 import com.manutencao.Curta;
 import com.manutencao.Manutencao;
 
-public class Carro extends Veiculo implements Serializable {
+public class Carro extends Veiculo {
     protected static final double TANQUE_CAPACIDADE;
 
     static {

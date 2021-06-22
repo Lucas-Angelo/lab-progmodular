@@ -42,6 +42,7 @@ public abstract class Veiculo implements Serializable, Comparable<Object> {
         Manutencao m = new Manutencao(plano);
         m.registrarManutencao(this.kmRodados);
         this.manutencoes.add(m);
+        this.rotas = new LinkedHashSet<Rota>();
     }
 
     /** Método para retornar a quilometragem
