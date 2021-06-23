@@ -45,6 +45,6 @@ public class FurgaoTest {
     public void furgaoManutencao() {
         this.furgao = new Furgao("AAA-4444");
         this.furgao.fazerManutencao();
-        assertEquals(400.0, this.furgao.getDespesaAtual(), .0);
+        assertEquals(200.0, this.furgao.getDespesaAtual(), .0);
     }   
 }

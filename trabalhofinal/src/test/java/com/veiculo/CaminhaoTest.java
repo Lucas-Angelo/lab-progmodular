@@ -42,9 +42,9 @@ public class CaminhaoTest {
     }
 
     @Test
-    public void caimnhaoManutencao() {
+    public void caminhaoManutencao() {
         this.caminhao = new Caminhao("AAA-4444");
         this.caminhao.fazerManutencao();
-        assertEquals(800.0, this.caminhao.getDespesaAtual(), .0);
+        assertEquals(200.0, this.caminhao.getDespesaAtual(), .0);
     }   
 }

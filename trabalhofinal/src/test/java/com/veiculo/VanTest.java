@@ -45,6 +45,6 @@ public class VanTest {
     public void vanManutencao() {
         this.van = new Van("AAA-4444");
         this.van.fazerManutencao();
-        assertEquals(400.0, this.van.getDespesaAtual(), .0);
+        assertEquals(200.0, this.van.getDespesaAtual(), .0);
     }   
 }

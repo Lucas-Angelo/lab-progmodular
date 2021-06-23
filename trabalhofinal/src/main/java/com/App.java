@@ -147,14 +147,15 @@ public class App
         List<Veiculo> listaVeiculos = new LinkedList<>();
         listaVeiculos = carregarVeiculosDoArquivo(listaVeiculos, arquivo);
 
-        if (listaVeiculos.isEmpty()) {
-            listaVeiculos.add(new Carro("LVI-7368"));
-            listaVeiculos.add(new Furgao("CSE-6837"));
-            listaVeiculos.add(new Van("MNX-2556"));
-            listaVeiculos.add(new Caminhao("MUW-7826"));
-        }
-        salvarVeiculosNoArquivo(listaVeiculos, arquivo);
-        listaVeiculos = carregarVeiculosDoArquivo(listaVeiculos, arquivo);
+        /* Caso queria apagar o arquivo e adic */
+        // if (listaVeiculos.isEmpty()) {
+        //     listaVeiculos.add(new Carro("LVI-7368"));
+        //     listaVeiculos.add(new Furgao("CSE-6837"));
+        //     listaVeiculos.add(new Van("MNX-2556"));
+        //     listaVeiculos.add(new Caminhao("MUW-7826"));
+        // }
+        // salvarVeiculosNoArquivo(listaVeiculos, arquivo);
+        // listaVeiculos = carregarVeiculosDoArquivo(listaVeiculos, arquivo);
 
         Optional<Veiculo> veiculo = Optional.empty();
         int opcao = -1;
